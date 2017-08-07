@@ -1,0 +1,10 @@
+[
+  {"keyPress": "z", "name": "A", "frequency": "880"},
+  {"keyPress": "x", "name": "B", "frequency": "987.767"},
+  {"keyPress": "c", "name": "C", "frequency": "1046.50"},
+  {"keyPress": "v", "name": "D", "frequency": "1174.66"},
+  {"keyPress": "b", "name": "E", "frequency": "1318.51"},
+  {"keyPress": "n", "name": "F", "frequency": "1396.91"},
+  {"keyPress": "m", "name": "G", "frequency": "1567.98"},
+  {"keyPress": "a", "name": "A2", "frequency": "1760"}
+]

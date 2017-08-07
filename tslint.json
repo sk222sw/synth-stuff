@@ -1,0 +1,26 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-config-airbnb"],
+  "rules": {
+    "member-access": false,
+    "ter-arrow-parens": false,
+    "semicolon": [
+      true, "never"
+    ],
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "object-literal-sort-keys": false,
+    "object-shorthand-properties-first": false,
+    "variable-name": [
+      "allow-pascal-case"
+    ],
+    "import-name": false,
+    "interface-name": [
+      false
+    ],
+    "align": [
+      false
+    ],
+    "curly": false,
+    "no-unused-variable": false
+  }
+}
