@@ -7,18 +7,23 @@ const start = (audioContext, { oscillator, gain }) => {
 const stop = (o) => o.oscillator.stop()
 
 const create = audioContext =>
-  ({ frequency, volume, id, offset }) => {
-    const osc = audioContext.createOscillator()
+  ({ frequency, volume, id, offset, waveform }) => {
+    const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
 
-    osc.frequency.value = frequency + offset
+    const value = Number(frequency) + Number(offset)
+    oscillator.frequency.value = value
+    oscillator.type = waveform
 
     gain.gain.value = volume
 
     return {
-      oscillator: osc,
+      oscillator,
       gain,
       id,
+      frequency,
+      offset: 0,
+      semi: 0,
     }
   }
 
@@ -27,13 +32,25 @@ const setVolume = (oscillator, volume) => {
 }
 
 const setFrequency = (oscillator, frequency) => {
-  oscillator.oscillator.frequency.value = frequency + (oscillator.offset)
+  oscillator.frequency = frequency
+  oscillator.oscillator.frequency.value = Number(oscillator.frequency)
+  oscillator.oscillator.detune.value = Number(oscillator.semi * 100)
+  oscillator.oscillator.detune.value += Number(oscillator.offset)
 }
 
 const setOffset = (oscillator, offset) => {
-  console.log(oscillator)
   oscillator.offset = offset
-  setFrequency(oscillator, oscillator.oscillator.frequency.value)
+  setFrequency(oscillator, oscillator.frequency)
+}
+
+const setSemi = (oscillator, semi) => {
+  oscillator.semi = semi
+  setFrequency(oscillator, oscillator.frequency)
+}
+
+const setWaveform = (oscillator, waveform) => {
+  oscillator.waveform = waveform
+  oscillator.oscillator.type = waveform
 }
 
 export default {
@@ -43,4 +60,6 @@ export default {
   setFrequency,
   setVolume,
   setOffset,
+  setSemi,
+  setWaveform,
 }

@@ -30,13 +30,20 @@ const setFrequency = (synth, frequency) => {
   synth.oscillators.forEach(o => Oscillator.setFrequency(o, frequency))
 }
 
-const setOffset = (synth, id, offset) => {
-  const oscillator = synth.oscillators.filter(o => o.id !== id)
-  Oscillator.setOffset(oscillator[0], offset)
+const setOffset = (oscillator, offset) => {
+  Oscillator.setOffset(oscillator, offset)
+}
+
+const setSemi = (oscillator, semi) => {
+  Oscillator.setSemi(oscillator, semi)
 }
 
 const setVolume = (synth, volume) => {
   synth.oscillators.forEach(o => Oscillator.setVolume(o, volume))
+}
+
+const setWaveform = (oscillator, waveform) => {
+  Oscillator.setWaveform(oscillator, waveform)
 }
 
 export default {
@@ -48,4 +55,6 @@ export default {
   setFrequency,
   setVolume,
   setOffset,
+  setSemi,
+  setWaveform,
 }
