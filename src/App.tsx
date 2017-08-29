@@ -6,6 +6,7 @@ import keys from './assets/keys.json'
 import hoo from './models/Synth2'
 
 import * as R from 'ramda'
+import Envelope from './components/Envelope'
 import Keyboard from './components/Keyboard'
 import { keyExists, keyIsPressed, removeKey } from './helpers/KeyHandler'
 import ComputerKeyboard from './hocs/ComputerKeyboard'
@@ -27,6 +28,12 @@ class App extends React.Component<{}, any> {
       waveforms: [
         'triangle', 'sawtooth', 'sine', 'square',
       ],
+      envelope: {
+        a: 0.25,
+        d: 0.25,
+        s: 0.25,
+        r: 0.25,
+      },
       pressedKeys: [],
       keys,
       oscillatorConfigs: [
@@ -168,6 +175,15 @@ class App extends React.Component<{}, any> {
     }
   }
 
+  changeEnvelope = type => value => {
+    const envelope = {
+      ...this.state.envelope,
+      [type]: value,
+    }
+
+    this.setState({ envelope })
+  }
+
   render() {
 
     return (
@@ -231,6 +247,13 @@ class App extends React.Component<{}, any> {
             {this.state.pressedKeys.map(key => <span key={key}>{key}</span>)}
           </div>
         </ComputerKeyboard>
+        <Envelope
+          envelope={this.state.envelope}
+          changeAttack={this.changeEnvelope('a')}
+          changeDecay={this.changeEnvelope('d')}
+          changeSustain={this.changeEnvelope('s')}
+          changeRelease={this.changeEnvelope('r')}
+        />
       </div>
     )
   }

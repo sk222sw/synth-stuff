@@ -13,7 +13,8 @@
     "react-dom": "^15.6.1",
     "react-scripts-ts": "2.5.0",
     "react-slider": "^0.8.0",
-    "recompose": "^0.24.0"
+    "recompose": "^0.24.0",
+    "styled-components": "^2.1.2"
   },
   "devDependencies": {
     "@types/webaudioapi": "^0.0.27",
