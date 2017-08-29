@@ -31,11 +31,13 @@ const setFrequency = (synth, frequency) => {
 }
 
 const setOffset = (oscillator, offset) => {
-  Oscillator.setOffset(oscillator, offset)
+  if (oscillator)
+    Oscillator.setOffset(oscillator, offset)
 }
 
 const setSemi = (oscillator, semi) => {
-  Oscillator.setSemi(oscillator, semi)
+  if (oscillator)
+    Oscillator.setSemi(oscillator, semi)
 }
 
 const setVolume = (synth, volume) => {
@@ -43,7 +45,8 @@ const setVolume = (synth, volume) => {
 }
 
 const setWaveform = (oscillator, waveform) => {
-  Oscillator.setWaveform(oscillator, waveform)
+  if (oscillator)
+    Oscillator.setWaveform(oscillator, waveform)
 }
 
 const stopOscillators = (synth, oscillators) => {
