@@ -63,7 +63,7 @@ class App extends React.Component<{}, any> {
     this.setState({ synth, oscillatorConfigs })
   }
 
-  stop = () => hoo.stop(this.state.synth)
+  // stop = () => hoo.stop(this.state.synth)
 
   setOffset = (oscillator) => (offset) => {
     const { oscillatorConfigs } = this.state
@@ -150,6 +150,7 @@ class App extends React.Component<{}, any> {
   }
 
   onKeyClick = key => this.playWithoutPortamento(key)
+
   handleKeyDown = ({ key }) => {
     if (keyExists(key) && !keyIsPressed(this.state.pressedKeys, key)) {
 
@@ -169,9 +170,15 @@ class App extends React.Component<{}, any> {
         pressedKeys: removeKey(this.state.pressedKeys, key),
       })
       const oscillators = findByKeyPress(this.state.synth.oscillators)(key)
-      hoo.stopOscillators(this.state.synth, oscillators)
-      this.state.synth.oscillators = this.state.synth.oscillators
-        .filter(o => o.keyPress !== key)
+      hoo.stopOscillators(this.state.synth, oscillators, this.state.envelope.r)
+
+      this.setState({
+        synth: {
+          ...this.state.synth,
+          oscillators: this.state.synth.oscillators
+          .filter(o => o.keyPress !== key),
+        },
+      })
     }
   }
 
