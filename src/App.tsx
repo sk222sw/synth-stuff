@@ -146,7 +146,7 @@ class App extends React.Component<{}, any> {
 
     this.setOscillatorsToPlaying()
 
-    hoo.play(this.state.synth)
+    hoo.play(this.state.synth, this.state.envelope.a)
   }
 
   onKeyClick = key => this.playWithoutPortamento(key)

@@ -1,7 +1,10 @@
-const start = (audioContext, oscillator) => {
+const start = (audioContext, oscillator, attack) => {
   if (!oscillator.playing) {
     oscillator.oscillator.connect(oscillator.gain)
     oscillator.gain.connect(audioContext.destination)
+
+    rampGain(oscillator.gain, oscillator.volume, attack)
+
     oscillator.oscillator.start()
     oscillator.playing = true
   }
@@ -22,7 +25,7 @@ const create = audioContext =>
     oscillator.frequency.value = value
     oscillator.type = waveform
 
-    gain.gain.value = volume
+    gain.gain.value = 0
 
     return {
       oscillator,
@@ -33,6 +36,7 @@ const create = audioContext =>
       semi: 0,
       keyPress,
       playing: false,
+      volume,
     }
   }
 

@@ -15,9 +15,9 @@ const addOscillator = (synth, config) => {
   synth.oscillators.push(Oscillator.create(ctx)(config))
 }
 
-const play = (synth) => {
+const play = (synth, attack) => {
   synth.oscillators.forEach(o => {
-    Oscillator.start(ctx, o)
+    Oscillator.start(ctx, o, ctx.currentTime + attack)
   })
 }
 
