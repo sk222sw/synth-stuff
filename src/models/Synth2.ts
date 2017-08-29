@@ -21,8 +21,8 @@ const play = (synth) => {
   })
 }
 
-const stop = synth => {
-  synth.oscillators.forEach(o => Oscillator.stop(o))
+const stop = (synth, time) => {
+  synth.oscillators.forEach(o => Oscillator.stop(o, time))
   synth.oscillators = []
 }
 
@@ -49,9 +49,9 @@ const setWaveform = (oscillator, waveform) => {
     Oscillator.setWaveform(oscillator, waveform)
 }
 
-const stopOscillators = (synth, oscillators) => {
+const stopOscillators = (synth, oscillators, release) => {
   oscillators.forEach(oscillator => {
-    Oscillator.stop(oscillator)
+    Oscillator.stop(oscillator, ctx.currentTime + release)
   })
 }
 

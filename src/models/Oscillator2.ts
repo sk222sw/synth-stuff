@@ -7,9 +7,10 @@ const start = (audioContext, oscillator) => {
   }
 }
 
-const stop = (o) => {
+const stop = (o, release) => {
   o.playing = false
-  o.oscillator.stop()
+  o.oscillator.stop(release)
+  rampGain(o.gain, 0, release)
 }
 
 const create = audioContext =>
@@ -59,6 +60,10 @@ const setSemi = (oscillator, semi) => {
 const setWaveform = (oscillator, waveform) => {
   oscillator.waveform = waveform
   oscillator.oscillator.type = waveform
+}
+
+const rampGain = (gainNode, gain, time) => {
+  gainNode.gain.linearRampToValueAtTime(gain, time)
 }
 
 export default {
