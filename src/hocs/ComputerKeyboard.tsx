@@ -1,15 +1,19 @@
 import * as React from 'react'
 
-function computerKeyboard(WrappedComponent) {
-  return class extends React.Component {
-    componentWillMount() {
-      window.addEventListener('keydown', console.log)
-    }
+class ComputerKeyboard extends React.Component<any, any> {
+  componentWillMount() {
+    window.addEventListener('keydown', this.props.onKeyDown, false)
+    window.addEventListener('keyup', this.props.onKeyUp, false)
+  }
 
-    render() {
-      return <WrappedComponent {...this.state} {...this.props} />
-    }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.props.onKeyDown, false)
+    window.removeEventListener('keyup', this.props.onKeyUp, false)
+  }
+
+  render() {
+    return <div>{this.props.children}</div>
   }
 }
 
-export default computerKeyboard
+export default ComputerKeyboard

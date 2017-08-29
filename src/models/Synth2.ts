@@ -46,6 +46,12 @@ const setWaveform = (oscillator, waveform) => {
   Oscillator.setWaveform(oscillator, waveform)
 }
 
+const stopOscillators = (synth, oscillators) => {
+  oscillators.forEach(oscillator => {
+    Oscillator.stop(oscillator)
+  })
+}
+
 export default {
   setup,
   createSynth,
@@ -57,4 +63,5 @@ export default {
   setOffset,
   setSemi,
   setWaveform,
+  stopOscillators,
 }

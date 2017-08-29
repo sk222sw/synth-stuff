@@ -22,6 +22,10 @@
     ],
     "curly": false,
     "no-unused-variable": false,
-    "no-console": [false]
+    "no-console": [false],
+    "allowSyntheticDefaultImports": true,
+    "member-ordering": [
+      false
+    ]
   }
 }

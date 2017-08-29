@@ -1,13 +1,19 @@
-const start = (audioContext, { oscillator, gain }) => {
-  oscillator.connect(gain)
-  gain.connect(audioContext.destination)
-  oscillator.start()
+const start = (audioContext, oscillator) => {
+  if (!oscillator.playing) {
+    oscillator.oscillator.connect(oscillator.gain)
+    oscillator.gain.connect(audioContext.destination)
+    oscillator.oscillator.start()
+    oscillator.playing = true
+  }
 }
 
-const stop = (o) => o.oscillator.stop()
+const stop = (o) => {
+  o.playing = false
+  o.oscillator.stop()
+}
 
 const create = audioContext =>
-  ({ frequency, volume, id, offset, waveform }) => {
+  ({ frequency, volume, id, offset, waveform, keyPress }) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
 
@@ -24,6 +30,8 @@ const create = audioContext =>
       frequency,
       offset: 0,
       semi: 0,
+      keyPress,
+      playing: false,
     }
   }
 
