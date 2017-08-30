@@ -8,11 +8,38 @@ const Envelope = ({
   changeSustain,
   changeRelease,
 }) => (
-  <div className="envelope">
-    <EnvelopeItem name={'A'} onChange={changeAttack}  value={envelope.a} />
-    <EnvelopeItem name={'D'} onChange={changeDecay}   value={envelope.d} />
-    <EnvelopeItem name={'S'} onChange={changeSustain} value={envelope.s} />
-    <EnvelopeItem name={'R'} onChange={changeRelease} value={envelope.r} />
+  <div>
+    <EnvelopeItem
+      name={'A'}
+      onChange={changeAttack}
+      value={envelope.a}
+      step={1}
+      range={[1, 999]}
+      prefix={'ms'}
+    />
+    <EnvelopeItem
+      name={'D'}
+      onChange={changeDecay}
+      value={envelope.d}
+      step={1}
+      range={[1, 999]}
+      prefix={'ms'}
+    />
+    <EnvelopeItem
+      name={'S'}
+      onChange={changeSustain}
+      value={envelope.s}
+      step={0.01}
+      range={[0.01, 1]}
+    />
+    <EnvelopeItem
+      name={'R'}
+      onChange={changeRelease}
+      value={envelope.r}
+      step={1}
+      range={[1,999]}
+      prefix={'ms'}
+    />
   </div>
 )
 

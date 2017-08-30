@@ -29,10 +29,10 @@ class App extends React.Component<{}, any> {
         'triangle', 'sawtooth', 'sine', 'square',
       ],
       envelope: {
-        a: 0.25,
-        d: 0.25,
+        a: 20,
+        d: 50,
         s: 0.25,
-        r: 0.25,
+        r: 50,
       },
       pressedKeys: [],
       keys,
@@ -42,12 +42,14 @@ class App extends React.Component<{}, any> {
           playing: false,
           semi: 0,
           waveform: 'triangle',
+          peakVolume: 0.5,
         },
         {
           offset: 20,
           playing: false,
           semi: 0,
           waveform: 'sine',
+          peakVolume: 0.5,
         },
       ],
     }
@@ -74,6 +76,17 @@ class App extends React.Component<{}, any> {
       hoo.setOffset(this.state.synth.oscillators[index], offset)
 
     this.updateOscillatorConfig(index, current, 'offset', offset)
+  }
+
+  setOscillatorVolume = (oscillator) => (volume) => {
+    const { oscillatorConfigs } = this.state
+    const index = R.findIndex(R.propEq('id', oscillator.id))(oscillatorConfigs)
+    const current = oscillatorConfigs[index]
+
+    if (oscillator.playing)
+      hoo.setOscillatorVolume(this.state.synth.oscillators[index], volume)
+
+    this.updateOscillatorConfig(index, current, 'peakVolume', volume)
   }
 
   setWaveform = (oscillator, waveform) => {
@@ -137,7 +150,7 @@ class App extends React.Component<{}, any> {
       hoo.addOscillator(this.state.synth, {
         id: o.id,
         frequency: key.frequency,
-        volume: this.state.volume,
+        volume: o.peakVolume,
         offset: o.offset,
         waveform: o.waveform,
         keyPress: key.keyPress,
@@ -146,7 +159,7 @@ class App extends React.Component<{}, any> {
 
     this.setOscillatorsToPlaying()
 
-    hoo.play(this.state.synth, this.state.envelope.a)
+    hoo.play(this.state.synth, this.state.envelope)
   }
 
   onKeyClick = key => this.playWithoutPortamento(key)
@@ -202,14 +215,27 @@ class App extends React.Component<{}, any> {
           {this.state.oscillatorConfigs.map(o =>
             <div key={o.id} style={{ width: 300, marginLeft: 250 }}>
               {o.playing ? '>' : ''}
-              Offset
-              <Slider
-                value={o.offset}
-                onChange={this.setOffset(o)}
-                min={-50}
-                max={50}
-              />
-              {o.offset}
+              <div>
+                Volume
+                <Slider
+                  value={o.peakVolume}
+                  onChange={this.setOscillatorVolume(o)}
+                  min={0}
+                  max={1}
+                  step={0.01}
+                />
+                {o.peakVolume}
+              </div>
+              <div>
+                Offset
+                <Slider
+                  value={o.offset}
+                  onChange={this.setOffset(o)}
+                  min={-50}
+                  max={50}
+                />
+                {o.offset}
+              </div>
               <div>
                 semi
                 <input
@@ -234,17 +260,6 @@ class App extends React.Component<{}, any> {
               </div>
             </div>,
           )}
-          <div style={{ width: 300, marginLeft: 250 }}>
-            Volume
-            <Slider
-              value={this.state.volume}
-              onChange={this.setVolume}
-              min={0}
-              max={1}
-              step={0.0001}
-            />
-            {this.state.volume}
-          </div>
           <Keyboard
             keys={this.state.keys}
             currentKey="A"
@@ -253,14 +268,14 @@ class App extends React.Component<{}, any> {
           <div>
             {this.state.pressedKeys.map(key => <span key={key}>{key}</span>)}
           </div>
+          <Envelope
+            envelope={this.state.envelope}
+            changeAttack={this.changeEnvelope('a')}
+            changeDecay={this.changeEnvelope('d')}
+            changeSustain={this.changeEnvelope('s')}
+            changeRelease={this.changeEnvelope('r')}
+          />
         </ComputerKeyboard>
-        <Envelope
-          envelope={this.state.envelope}
-          changeAttack={this.changeEnvelope('a')}
-          changeDecay={this.changeEnvelope('d')}
-          changeSustain={this.changeEnvelope('s')}
-          changeRelease={this.changeEnvelope('r')}
-        />
       </div>
     )
   }

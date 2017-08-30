@@ -15,9 +15,9 @@ const addOscillator = (synth, config) => {
   synth.oscillators.push(Oscillator.create(ctx)(config))
 }
 
-const play = (synth, attack) => {
+const play = (synth, envelope) => {
   synth.oscillators.forEach(o => {
-    Oscillator.start(ctx, o, ctx.currentTime + attack)
+    Oscillator.start(ctx, o, ctx.currentTime, envelope)
   })
 }
 
@@ -33,6 +33,11 @@ const setFrequency = (synth, frequency) => {
 const setOffset = (oscillator, offset) => {
   if (oscillator)
     Oscillator.setOffset(oscillator, offset)
+}
+
+const setOscillatorVolume = (oscillator, volume) => {
+  if (oscillator)
+    Oscillator.setVolume(oscillator, volume)
 }
 
 const setSemi = (oscillator, semi) => {
@@ -51,7 +56,7 @@ const setWaveform = (oscillator, waveform) => {
 
 const stopOscillators = (synth, oscillators, release) => {
   oscillators.forEach(oscillator => {
-    Oscillator.stop(oscillator, ctx.currentTime + release)
+    Oscillator.stop(oscillator, ctx.currentTime + release / 1000)
   })
 }
 
@@ -67,4 +72,5 @@ export default {
   setSemi,
   setWaveform,
   stopOscillators,
+  setOscillatorVolume,
 }

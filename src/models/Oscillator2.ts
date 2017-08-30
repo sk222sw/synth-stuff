@@ -1,9 +1,21 @@
-const start = (audioContext, oscillator, attack) => {
+const start = (audioContext, oscillator, currentTime, envelope) => {
   if (!oscillator.playing) {
     oscillator.oscillator.connect(oscillator.gain)
     oscillator.gain.connect(audioContext.destination)
 
-    rampGain(oscillator.gain, oscillator.volume, attack)
+    const attack = audioContext.currentTime + (envelope.d / 1000)
+    const decay = audioContext.currentTime + (envelope.a / 1000)
+    const sustain = oscillator.volume * envelope.s
+
+    rampGain(
+      oscillator.gain,
+      oscillator.volume,
+      attack)
+
+    rampGain(
+      oscillator.gain,
+      sustain,
+      decay)
 
     oscillator.oscillator.start()
     oscillator.playing = true

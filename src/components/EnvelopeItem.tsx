@@ -15,14 +15,17 @@ const EnvelopeSlider = styled(Slider)`
   max-width: 75%;
 ` as Slider
 
-const getValue = value => value * 100 || 0
-
-const getOnChangeValue = onChange => value => onChange(value / 100)
+const initialRange = [1, 100]
+const initialStep = 1
+const initialPrefix = ''
 
 const EnvelopeItem = ({
   value,
   onChange,
   name,
+  range = initialRange,
+  step = initialStep,
+  prefix = initialPrefix,
 }) => (
   <div className="envelope-item">
     <SliderContainer>
@@ -30,9 +33,15 @@ const EnvelopeItem = ({
         {name}
       </span>
       <span>
-        {value}
+        {value} {prefix}
       </span>
-      <EnvelopeSlider value={getValue(value)} onChange={getOnChangeValue(onChange)}/>
+      <EnvelopeSlider
+        step={step}
+        min={range[0]}
+        max={range[1]}
+        value={value || 0}
+        onChange={onChange}
+      />
     </SliderContainer>
   </div>
 )
