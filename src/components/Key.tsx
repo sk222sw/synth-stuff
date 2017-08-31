@@ -1,11 +1,10 @@
 import * as React from 'react'
 
 const Key = ({ name, frequency, onClick }) => (
-  <button
-    type="button"
+  <div
     onClick={() => onClick({ name, frequency })}
   >
     {name}
-  </button>
+  </div>
 )
 export default Key

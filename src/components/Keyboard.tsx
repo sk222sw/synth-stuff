@@ -1,21 +1,36 @@
 import * as React from 'react'
 
+import styled from 'styled-components'
 import Key from './Key'
+import { Row } from './styles/index'
 
-const Keyboard = ({ keys, currentKey, onKeyClick }) => (
-  <div className="keyboard-container">
-    <h1>
-      {currentKey.name}
-    </h1>
+const StyledKey = styled.div`
+  border: solid rgba(0, 0, 0, 0.3) 1px;
+  width: 30px;
+  text-align: center;
+  height: 16px;
+`
+
+const StyledKeyboard = styled(Row)`
+  display: flex;
+  justify-content: space-around;
+`
+
+const Keyboard = ({ keys, currentKeys, onKeyClick }) => (
+  <StyledKeyboard>
     {keys.map((key, i) =>
-      <Key
-        key={i}
-        name={key.name}
-        frequency={key.frequency}
-        onClick={onKeyClick}
-      />,
+      <StyledKey
+        style={{ boxShadow: currentKeys.indexOf(key.keyPress) > -1 ? '' : '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}
+      >
+        <Key
+          key={i}
+          name={key.name}
+          frequency={key.frequency}
+          onClick={onKeyClick}
+        />
+      </StyledKey>,
     )}
-  </div>
+  </StyledKeyboard>
 )
 
 export default Keyboard

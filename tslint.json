@@ -26,6 +26,10 @@
     "allowSyntheticDefaultImports": true,
     "member-ordering": [
       false
+    ],
+    "jsx-alignment": false,
+    "max-line-length": [
+      140
     ]
   }
 }

@@ -1,4 +1,3 @@
-import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import * as React from 'react'
 import './App.css'
@@ -6,10 +5,32 @@ import keys from './assets/keys.json'
 import hoo from './models/Synth'
 
 import * as R from 'ramda'
+import styled from 'styled-components'
 import Envelope from './components/Envelope'
 import Keyboard from './components/Keyboard'
+import Oscillator from './components/Oscillator'
+import { CenteredRow, Row } from './components/styles/index'
 import { keyExists, keyIsPressed, removeKey } from './helpers/KeyHandler'
 import ComputerKeyboard from './hocs/ComputerKeyboard'
+
+const StyledSynth = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 616px;
+  background: white;
+  padding: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+`
+
+const StyledApp = styled.div`
+  width: 100%;
+  height: 100%;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+`
 
 const findByKeyPress = oscillators => R.compose(
   R.filter(R.__, oscillators),
@@ -26,7 +47,11 @@ class App extends React.Component<{}, any> {
       frequency: 880.00,
       volume: 0.1,
       waveforms: [
-        'triangle', 'sawtooth', 'sine', 'square',
+        'sine',
+        'triangle',
+        'sawtooth',
+        'square',
+
       ],
       envelope: {
         a: 20,
@@ -41,11 +66,11 @@ class App extends React.Component<{}, any> {
           offset: 0,
           playing: false,
           semi: 0,
-          waveform: 'triangle',
+          waveform: 'sine',
           peakVolume: 0.5,
         },
         {
-          offset: 20,
+          offset: 0,
           playing: false,
           semi: 0,
           waveform: 'sine',
@@ -64,8 +89,6 @@ class App extends React.Component<{}, any> {
 
     this.setState({ synth, oscillatorConfigs })
   }
-
-  // stop = () => hoo.stop(this.state.synth)
 
   setOffset = (oscillator) => (offset) => {
     const { oscillatorConfigs } = this.state
@@ -89,7 +112,7 @@ class App extends React.Component<{}, any> {
     this.updateOscillatorConfig(index, current, 'peakVolume', volume)
   }
 
-  setWaveform = (oscillator, waveform) => {
+  setWaveform = oscillator => waveform => {
     const { oscillatorConfigs } = this.state
     const index = this.getOscillatorConfigById(oscillator.id)
     const current = oscillatorConfigs[index]
@@ -207,75 +230,41 @@ class App extends React.Component<{}, any> {
   render() {
 
     return (
-      <div className="App">
-        <ComputerKeyboard
-          onKeyDown={this.handleKeyDown}
-          onKeyUp={this.handleKeyUp}
-        >
-          {this.state.oscillatorConfigs.map(o =>
-            <div key={o.id} style={{ width: 300, marginLeft: 250 }}>
-              <div>
-                Volume
-                <Slider
-                  value={o.peakVolume}
-                  onChange={this.setOscillatorVolume(o)}
-                  min={0}
-                  max={1}
-                  step={0.01}
-                />
-                {o.peakVolume}
-              </div>
-              <div>
-                Offset
-                <Slider
-                  value={o.offset}
-                  onChange={this.setOffset(o)}
-                  min={-50}
-                  max={50}
-                />
-                {o.offset}
-              </div>
-              <div>
-                semi
-                <input
-                  type="number"
-                  max="24"
-                  min="-24"
-                  value={o.semi}
-                  onChange={v => this.setSemi(o)(v.target.value)}
-                />
-                {o.semi}
-              </div>
-              <div>
-                {this.state.waveforms.map(w =>
-                  <button
-                    key={w}
-                    onClick={_ => this.setWaveform(o, w)}
-                    style={{ borderColor: o.waveform === w ? 'red' : '' }}
-                  >
-                    {w}
-                  </button>)
-                }
-              </div>
-            </div>,
-          )}
-          <Keyboard
-            keys={this.state.keys}
-            currentKey="A"
-            onKeyClick={this.onKeyClick}
+      <StyledApp>
+        <StyledSynth>
+          <ComputerKeyboard
+            onKeyDown={this.handleKeyDown}
+            onKeyUp={this.handleKeyUp}
           />
-          <div>
-            {this.state.pressedKeys.map(key => <span key={key}>{key}</span>)}
-          </div>
-          <Envelope
-            envelope={this.state.envelope}
-            changeAttack={this.changeEnvelope('a')}
-            changeDecay={this.changeEnvelope('d')}
-            changeSustain={this.changeEnvelope('s')}
-            changeRelease={this.changeEnvelope('r')}
-          />
-        </ComputerKeyboard>
-      </div>
+            <Row style={{ width: 600 }}>
+              {this.state.oscillatorConfigs.map(o =>
+                <Oscillator
+                  key={o.id}
+                  oscillator={o}
+                  waveforms={this.state.waveforms}
+                  setOscillatorVolume={this.setOscillatorVolume}
+                  setOffset={this.setOffset}
+                  setSemi={this.setSemi}
+                  setWaveform={this.setWaveform(o)}
+                />,
+              )}
+            </Row>
+            <CenteredRow>
+              <Envelope
+                envelope={this.state.envelope}
+                changeAttack={this.changeEnvelope('a')}
+                changeDecay={this.changeEnvelope('d')}
+                changeSustain={this.changeEnvelope('s')}
+                changeRelease={this.changeEnvelope('r')}
+              />
+            </CenteredRow>
+            <Keyboard
+              keys={this.state.keys}
+              currentKeys={this.state.pressedKeys}
+              onKeyClick={this.onKeyClick}
+            />
+        </StyledSynth>
+      </StyledApp>
     )
   }
 }

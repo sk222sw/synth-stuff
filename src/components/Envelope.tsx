@@ -1,9 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import EnvelopeItem from './EnvelopeItem'
+import { Row } from './styles/index'
 
-const StyledEnvelope = styled.div`
-  display: flex;
+const StyledEnvelope = styled(Row)`
+  margin-left: 24px;
 `
 
 const Envelope = ({
