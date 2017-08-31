@@ -1,5 +1,10 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import EnvelopeItem from './EnvelopeItem'
+
+const StyledEnvelope = styled.div`
+  display: flex;
+`
 
 const Envelope = ({
   envelope,
@@ -8,7 +13,7 @@ const Envelope = ({
   changeSustain,
   changeRelease,
 }) => (
-  <div>
+  <StyledEnvelope>
     <EnvelopeItem
       name={'A'}
       onChange={changeAttack}
@@ -40,7 +45,7 @@ const Envelope = ({
       range={[1,999]}
       prefix={'ms'}
     />
-  </div>
+  </StyledEnvelope>
 )
 
 export default Envelope

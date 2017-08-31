@@ -3,7 +3,7 @@ import 'rc-slider/assets/index.css'
 import * as React from 'react'
 import './App.css'
 import keys from './assets/keys.json'
-import hoo from './models/Synth2'
+import hoo from './models/Synth'
 
 import * as R from 'ramda'
 import Envelope from './components/Envelope'
@@ -214,7 +214,6 @@ class App extends React.Component<{}, any> {
         >
           {this.state.oscillatorConfigs.map(o =>
             <div key={o.id} style={{ width: 300, marginLeft: 250 }}>
-              {o.playing ? '>' : ''}
               <div>
                 Volume
                 <Slider

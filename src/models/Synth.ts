@@ -1,71 +1,76 @@
-import { createOscillator, OscillatorFactory } from './Oscillator'
+import Oscillator from './Oscillator'
 
-interface Synth {
-  playing: boolean
-  audioContext: AudioContext
-  oscillators: OscillatorFactory[]
-  oscillatorCount: number
-  effects: any[]
-  frequency: number
-  volume: number
-  play(): Synth
-  stop(): Synth
-  setFrequency(frequency: number): void
-  setVolume(volume: number): void
-  addFilter(): void
-  removeFilter(): void
-  configure({ frequency, volume }: {frequency?: number, volume?: number}): Synth
-}
+let ctx
 
-export enum SynthType {
-  Mono,
-  Poly,
-}
+const setup = (context = new AudioContext()) => ctx = context
 
-export const createSynth = (audioContext: AudioContext): Synth => ({
-  audioContext,
-  playing: false,
-  oscillators: [],
-  oscillatorCount: 1,
-  effects: [],
-  frequency: 1000,
-  volume: 1,
-  configure({ frequency = 1000, volume = 1 }) {
-    this.frequency = frequency
-    this.volume = volume
-    return this
-  },
-  play() {
-    for (let index = 0; index < this.oscillatorCount; index++) {
-      const osc = createOscillator(audioContext)({
-        frequency: this.frequency,
-        volume: this.volume,
-        effects: this.effects,
-      })
-      osc.start()
-      this.oscillators.push(osc as any)
-    }
-    return this
-  },
-  stop() {
-    this.oscillators.forEach(o => o.stop())
-    return this
-  },
-  setFrequency(frequency) {
-    this.oscillators.forEach(o => o.setFrequency(frequency))
-    return this
-  },
-  setVolume(volume) {
-    this.oscillators.forEach(o => o.setVolume(volume))
-    return this
-  },
-  addFilter() {
-    // const filter = effect(audioContext)({ effects: this.effects }).filter()
-    // this.effects.push(filter)
-  },
-  removeFilter() {
-    if (this.effects.length) {
-      this.effects = this.effects.filter(f => f.constructor.name !== 'BiquadFilterNode')
-    }
-  },
+const createSynth = (audioContext = ctx) => ({
+  oscillators = [],
+}) => ({
+  oscillators,
+  context: ctx,
 })
+
+const addOscillator = (synth, config) => {
+  synth.oscillators.push(Oscillator.create(ctx)(config))
+}
+
+const play = (synth, envelope) => {
+  synth.oscillators.forEach(o => {
+    Oscillator.start(ctx, o, ctx.currentTime, envelope)
+  })
+}
+
+const stop = (synth, time) => {
+  synth.oscillators.forEach(o => Oscillator.stop(o, time))
+  synth.oscillators = []
+}
+
+const setFrequency = (synth, frequency) => {
+  synth.oscillators.forEach(o => Oscillator.setFrequency(o, frequency))
+}
+
+const setOffset = (oscillator, offset) => {
+  if (oscillator)
+    Oscillator.setOffset(oscillator, offset)
+}
+
+const setOscillatorVolume = (oscillator, volume) => {
+  if (oscillator)
+    Oscillator.setVolume(oscillator, volume)
+}
+
+const setSemi = (oscillator, semi) => {
+  if (oscillator)
+    Oscillator.setSemi(oscillator, semi)
+}
+
+const setVolume = (synth, volume) => {
+  synth.oscillators.forEach(o => Oscillator.setVolume(o, volume))
+}
+
+const setWaveform = (oscillator, waveform) => {
+  if (oscillator)
+    Oscillator.setWaveform(oscillator, waveform)
+}
+
+const stopOscillators = (synth, oscillators, release) => {
+  oscillators.forEach(oscillator => {
+    Oscillator.stop(oscillator, ctx.currentTime + release / 1000)
+  })
+}
+
+export default {
+  setup,
+  createSynth,
+  addOscillator,
+  play,
+  stop,
+  setFrequency,
+  setVolume,
+  setOffset,
+  setSemi,
+  setWaveform,
+  stopOscillators,
+  setOscillatorVolume,
+}

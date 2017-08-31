@@ -8,11 +8,11 @@
     "@types/react": "^15.6.0",
     "@types/react-dom": "^15.5.1",
     "ramda": "^0.24.1",
-    "rc-slider": "^8.3.1",
     "react": "^15.6.1",
+    "react-canvas-knob": "^0.4.0",
     "react-dom": "^15.6.1",
+    "react-rangeslider": "^2.1.0",
     "react-scripts-ts": "2.5.0",
-    "react-slider": "^0.8.0",
     "recompose": "^0.24.0",
     "styled-components": "^2.1.2"
   },

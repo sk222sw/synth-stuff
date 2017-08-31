@@ -1,62 +1,94 @@
-import * as R from 'ramda'
-import { Effect } from './Effect'
+const start = (audioContext, oscillator, currentTime, envelope) => {
+  if (!oscillator.playing) {
+    oscillator.oscillator.connect(oscillator.gain)
+    oscillator.gain.connect(audioContext.destination)
 
-export interface OscillatorFactory {
-  audioContext: AudioContext
-  oscillatorNode: OscillatorNode
-  gainNode: GainNode
-  effects: BiquadFilterNode[],
-  start(time?: number): OscillatorFactory
-  stop(time?: number): OscillatorFactory
-  addEffect(effect: Effect): OscillatorFactory
-  setFrequency(frequency: number): void
-  setVolume(volume: number): void
-  setupConnections(nodes: AudioNode[]): void
+    const attack = audioContext.currentTime + (envelope.d / 1000)
+    const decay = audioContext.currentTime + (envelope.a / 1000)
+    const sustain = oscillator.volume * envelope.s
+
+    rampGain(
+      oscillator.gain,
+      oscillator.volume,
+      attack)
+
+    rampGain(
+      oscillator.gain,
+      sustain,
+      decay)
+
+    oscillator.oscillator.start()
+    oscillator.playing = true
+  }
 }
 
-export const createOscillator =
-  (audioContext: AudioContext) => ({
-    frequency = 1000,
-    volume = 0.5,
-    playing = false,
-    oscillatorNode = audioContext.createOscillator(),
-    gainNode = audioContext.createGain(),
-    effects = [] as Effect[],
-  }) => ({
-    setFrequency(fr) {
-      oscillatorNode.frequency.value = fr
-    },
-    setVolume(value) {
-      gainNode.gain.value = value
-    },
-    setupConnections(nodes: AudioNode[]) {
-      const connectedNodes = nodes.reduce((prev, curr) => {
-        if (prev.length) {
-          R.last(prev).connect(curr)
-        }
-        return [...prev, curr]
-      }, [] as AudioNode[])
+const stop = (o, release) => {
+  o.playing = false
+  o.oscillator.stop(release)
+  rampGain(o.gain, 0, release)
+}
 
-      return connectedNodes
-    },
-    start(time = 0) {
-      gainNode.gain.value = volume
-      oscillatorNode.frequency.value = frequency
+const create = audioContext =>
+  ({ frequency, volume, id, offset, waveform, keyPress }) => {
+    const oscillator = audioContext.createOscillator()
+    const gain = audioContext.createGain()
 
-      const toConnect = [oscillatorNode, gainNode] as any
+    const value = Number(frequency) + Number(offset)
+    oscillator.frequency.value = value
+    oscillator.type = waveform
 
-      effects.forEach(x => toConnect.push(x.effectNode))
+    gain.gain.value = 0
 
-      const connectedNodes =
-        this.setupConnections(toConnect)
+    return {
+      oscillator,
+      gain,
+      id,
+      frequency,
+      offset: 0,
+      semi: 0,
+      keyPress,
+      playing: false,
+      volume,
+    }
+  }
 
-      R.last(connectedNodes).connect(audioContext.destination)
+const setVolume = (oscillator, volume) => {
+  oscillator.gain.gain.value = volume
+}
 
-      oscillatorNode.start(time)
-      return this
-    },
-    stop(time = 0) {
-      oscillatorNode.stop()
-      return this
-    },
-  })
+const setFrequency = (oscillator, frequency) => {
+  oscillator.frequency = frequency
+  oscillator.oscillator.frequency.value = Number(oscillator.frequency)
+  oscillator.oscillator.detune.value = Number(oscillator.semi * 100)
+  oscillator.oscillator.detune.value += Number(oscillator.offset)
+}
+
+const setOffset = (oscillator, offset) => {
+  oscillator.offset = offset
+  setFrequency(oscillator, oscillator.frequency)
+}
+
+const setSemi = (oscillator, semi) => {
+  oscillator.semi = semi
+  setFrequency(oscillator, oscillator.frequency)
+}
+
+const setWaveform = (oscillator, waveform) => {
+  oscillator.waveform = waveform
+  oscillator.oscillator.type = waveform
+}
+
+const rampGain = (gainNode, gain, time) => {
+  gainNode.gain.linearRampToValueAtTime(gain, time)
+}
+
+export default {
+  start,
+  stop,
+  create,
+  setFrequency,
+  setVolume,
+  setOffset,
+  setSemi,
+  setWaveform,
+}
