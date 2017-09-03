@@ -20,7 +20,7 @@ const Envelope = ({
       onChange={changeAttack}
       value={envelope.a}
       step={1}
-      range={[1, 999]}
+      range={[0, 999]}
       prefix={'ms'}
     />
     <EnvelopeItem
@@ -28,7 +28,7 @@ const Envelope = ({
       onChange={changeDecay}
       value={envelope.d}
       step={1}
-      range={[1, 999]}
+      range={[0, 999]}
       prefix={'ms'}
     />
     <EnvelopeItem
@@ -36,14 +36,14 @@ const Envelope = ({
       onChange={changeSustain}
       value={envelope.s}
       step={0.01}
-      range={[0.01, 1]}
+      range={[0.00, 1]}
     />
     <EnvelopeItem
       name={'R'}
       onChange={changeRelease}
       value={envelope.r}
       step={1}
-      range={[1,999]}
+      range={[0,999]}
       prefix={'ms'}
     />
   </StyledEnvelope>

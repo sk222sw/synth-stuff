@@ -3,29 +3,63 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
     oscillator.oscillator.connect(oscillator.gain)
     oscillator.gain.connect(audioContext.destination)
 
-    const attack = audioContext.currentTime + (envelope.d / 1000)
-    const decay = audioContext.currentTime + (envelope.a / 1000)
-    const sustain = oscillator.volume * envelope.s
+    const curr = audioContext.currentTime
+    const { oscillator: oscillatorNode } = oscillator
 
-    rampGain(
-      oscillator.gain,
-      oscillator.volume,
-      attack)
+    const { a, d, s } = envelope
 
-    rampGain(
-      oscillator.gain,
-      sustain,
-      decay)
+    const attackEnd = curr + toMs(a)
+    const decayEnd = attackEnd + toMs(d)
 
-    oscillator.oscillator.start()
+    oscillatorNode.start()
     oscillator.playing = true
+
+    if (a && !d && !s) {
+      oscillator.gain.gain.value = 0
+      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+    }
+    if (!a && d && s) {
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    }
+    if (!a && d && !s) {
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+      rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
+    }
+    if (!a && d && s) {
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    }
+    if (a && d && !s) {
+      oscillator.gain.gain.value = 0
+      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+      rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
+    }
+    if (a && d && s) {
+      oscillator.gain.gain.value = 0
+      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    }
+    if (!a && !d && s) {
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume * s, curr, 0)
+    }
+    if (a && !d && s) {
+      oscillator.gain.gain.value = 0
+      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+      oscillator.gain.gain.setTargetAtTime(oscillator.volume * s, attackEnd, 0)
+    }
+
   }
 }
+
+const toMs = x => x / 1000
 
 const stop = (o, release) => {
   o.playing = false
   o.oscillator.stop(release)
-  rampGain(o.gain, 0, release)
+  rampGain(o.gain, 0.0, release)
 }
 
 const create = audioContext =>
@@ -78,8 +112,22 @@ const setWaveform = (oscillator, waveform) => {
   oscillator.oscillator.type = waveform
 }
 
+// const rampGainPromise = (gainNode, gain, time) => {
+//   return new Promise(resolve => {
+
+//   })
+// }
+
 const rampGain = (gainNode, gain, time) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
+}
+
+const rampGainAndBeQuite = (gainNode, gain, time, quiteAt = 0) => {
+  gainNode.gain.linearRampToValueAtTime(gain, time)
+  console.log('///////////////////////')
+  console.log(quiteAt)
+  console.log('///////////////////////')
+  gainNode.gain.setTargetAtTime(0, time, quiteAt)
 }
 
 export default {

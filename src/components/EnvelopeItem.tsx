@@ -62,14 +62,11 @@ const EnvelopeItem = ({
   <div className="envelope-item">
     <SliderContainer>
       <OverridenSlider
-        style={{
-          border: 'solid black 1px !important',
-        }}
         orientation={'vertical'}
         step={step}
         min={range[0]}
         max={range[1]}
-        value={value.toFixed(2) || 0}
+        value={Number(value.toFixed(2) || 0)}
         onChange={onChange}
       />
       <EnvelopeText>
