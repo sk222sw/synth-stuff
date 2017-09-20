@@ -54,10 +54,10 @@ class App extends React.Component<{}, any> {
 
       ],
       envelope: {
-        a: 275,
-        d: 0,
-        s: 0,
-        r: 0,
+        a: 10,
+        d: 164,
+        s: 0.5,
+        r: 50,
       },
       pressedKeys: [],
       keys,

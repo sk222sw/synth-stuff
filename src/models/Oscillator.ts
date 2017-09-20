@@ -8,8 +8,8 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
 
     const { a, d, s } = envelope
 
-    const attackEnd = curr + toMs(a)
-    const decayEnd = attackEnd + toMs(d)
+    const attackEnd = curr + secondsToMilliseconds(a)
+    const decayEnd = attackEnd + secondsToMilliseconds(d)
 
     oscillatorNode.start()
     oscillator.playing = true
@@ -54,12 +54,13 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
   }
 }
 
-const toMs = x => x / 1000
+const secondsToMilliseconds = x => x / 1000
 
-const stop = (o, release) => {
-  o.playing = false
-  o.oscillator.stop(release)
-  rampGain(o.gain, 0.0, release)
+const stop = (oscillator, release) => {
+  oscillator.gain.gain.cancelScheduledValues(0)
+  oscillator.playing = false
+  oscillator.oscillator.stop(release)
+  rampGain(oscillator.gain, 0.0, release)
 }
 
 const create = audioContext =>
@@ -112,21 +113,12 @@ const setWaveform = (oscillator, waveform) => {
   oscillator.oscillator.type = waveform
 }
 
-// const rampGainPromise = (gainNode, gain, time) => {
-//   return new Promise(resolve => {
-
-//   })
-// }
-
 const rampGain = (gainNode, gain, time) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
 }
 
 const rampGainAndBeQuite = (gainNode, gain, time, quiteAt = 0) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
-  console.log('///////////////////////')
-  console.log(quiteAt)
-  console.log('///////////////////////')
   gainNode.gain.setTargetAtTime(0, time, quiteAt)
 }
 

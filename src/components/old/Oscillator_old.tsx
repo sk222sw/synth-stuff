@@ -49,9 +49,7 @@ class Oscillator extends React.Component<Props, State> {
   playWithDelay = (numberOfPlays, delayTime, frequency) => {
     for (let index = 0; index < numberOfPlays; index++) {
       this.startPlaying(1, index * delayTime, frequency)
-      console.log(index * delayTime)
     }
-
   }
 
   startPlaying = (volume = 1, delay = 0, frequency = 440) => {
