@@ -6,52 +6,59 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
     const curr = audioContext.currentTime
     const { oscillator: oscillatorNode } = oscillator
 
-    const { a, d, s } = envelope
+    const { a: attack, d: decay, s: sustain } = envelope
 
-    const attackEnd = curr + secondsToMilliseconds(a)
-    const decayEnd = attackEnd + secondsToMilliseconds(d)
+    const attackEnd = curr + secondsToMilliseconds(attack)
+    const decayEnd = attackEnd + secondsToMilliseconds(decay)
 
     oscillatorNode.start()
     oscillator.playing = true
 
-    if (a && !d && !s) {
-      oscillator.gain.gain.value = 0
-      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+    if (attack && !decay && !sustain) {
+      scheduleAttack(oscillator, attackEnd)
     }
-    if (!a && d && s) {
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    if (!attack && decay && sustain) {
+      scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
     }
-    if (!a && d && !s) {
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-      rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
+    if (!attack && decay && !sustain) {
+      scheduleDecay(oscillator, attackEnd, decayEnd)
     }
-    if (!a && d && s) {
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    if (attack && decay && !sustain) {
+      scheduleAttack(oscillator, attackEnd)
+      scheduleDecay(oscillator, attackEnd, decayEnd)
     }
-    if (a && d && !s) {
-      oscillator.gain.gain.value = 0
-      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-      rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
+    if (attack && decay && sustain) {
+      scheduleAttack(oscillator, attackEnd)
+      scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
     }
-    if (a && d && s) {
-      oscillator.gain.gain.value = 0
-      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-      rampGain(oscillator.gain, oscillator.volume * s, decayEnd)
+    if (!attack && !decay && sustain) {
+      scheduleSustain(oscillator, sustain, curr)
     }
-    if (!a && !d && s) {
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume * s, curr, 0)
-    }
-    if (a && !d && s) {
-      oscillator.gain.gain.value = 0
-      rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
-      oscillator.gain.gain.setTargetAtTime(oscillator.volume * s, attackEnd, 0)
+    if (attack && !decay && sustain) {
+      scheduleAttack(oscillator, attackEnd)
+      scheduleSustain(oscillator, sustain, attackEnd)
     }
 
   }
+}
+
+const scheduleAttack = (oscillator, attackEnd) => {
+  oscillator.gain.gain.value = 0
+  rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+}
+
+const scheduleDecayAndSustain = (oscillator, sustain, attackEnd, decayEnd) => {
+  oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+  rampGain(oscillator.gain, oscillator.volume * sustain, decayEnd)
+}
+
+const scheduleSustain = (oscillator, sustain, curr) => {
+  oscillator.gain.gain.setTargetAtTime(oscillator.volume * sustain, curr, 0)
+}
+
+const scheduleDecay = (oscillator, attackEnd, decayEnd) => {
+  oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
+  rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
 }
 
 const secondsToMilliseconds = x => x / 1000
