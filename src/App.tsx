@@ -1,4 +1,3 @@
-import 'rc-slider/assets/index.css'
 import * as React from 'react'
 import './App.css'
 import keys from './assets/keys.json'
