@@ -71,7 +71,7 @@ const stop = (oscillator, release) => {
 }
 
 const create = audioContext =>
-  ({ frequency, volume, id, offset, waveform, keyPress }) => {
+  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a' } = {}) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
 

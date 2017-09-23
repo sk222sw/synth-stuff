@@ -16,7 +16,7 @@ const StyledKeyboard = styled(Row)`
   justify-content: space-around;
 `
 
-const Keyboard = ({ keys, currentKeys, onKeyClick }) => (
+const Keyboard = ({ keys = [] as any[], currentKeys, onKeyClick }) => (
   <StyledKeyboard>
     {keys.map((key, i) =>
       <StyledKey

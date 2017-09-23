@@ -18,7 +18,9 @@
   },
   "devDependencies": {
     "@types/webaudioapi": "^0.0.27",
-    "tslint-config-airbnb": "^5.2.1"
+    "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "tslint-config-airbnb": "^5.2.1",
+    "web-audio-test-api": "^0.5.2"
   },
   "scripts": {
     "start": "react-scripts-ts start",
