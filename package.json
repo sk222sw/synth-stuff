@@ -20,6 +20,7 @@
   "devDependencies": {
     "canvas": "1.6.7",
     "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "gh-pages": "^1.0.0",
     "tslint-config-airbnb": "^5.2.1",
     "web-audio-test-api": "^0.5.2"
   },
@@ -27,6 +28,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
