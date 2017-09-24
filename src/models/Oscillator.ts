@@ -8,8 +8,8 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
 
     const { a: attack, d: decay, s: sustain } = envelope
 
-    const attackEnd = curr + secondsToMilliseconds(attack)
-    const decayEnd = attackEnd + secondsToMilliseconds(decay)
+    const attackEnd = curr + _millisecondToThousandOfASecond(attack)
+    const decayEnd = attackEnd + _millisecondToThousandOfASecond(decay)
 
     oscillatorNode.start()
     oscillator.playing = true
@@ -40,16 +40,18 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
     }
 
   }
+
+  return oscillator
 }
 
 const scheduleAttack = (oscillator, attackEnd) => {
   oscillator.gain.gain.value = 0
-  rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
+  _rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
 }
 
 const scheduleDecayAndSustain = (oscillator, sustain, attackEnd, decayEnd) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-  rampGain(oscillator.gain, oscillator.volume * sustain, decayEnd)
+  _rampGain(oscillator.gain, oscillator.volume * sustain, decayEnd)
 }
 
 const scheduleSustain = (oscillator, sustain, curr) => {
@@ -58,16 +60,16 @@ const scheduleSustain = (oscillator, sustain, curr) => {
 
 const scheduleDecay = (oscillator, attackEnd, decayEnd) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
-  rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
+  _rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
 }
 
-const secondsToMilliseconds = x => x / 1000
+export const _millisecondToThousandOfASecond = x => x / 1000
 
 const stop = (oscillator, release) => {
   oscillator.gain.gain.cancelScheduledValues(0)
   oscillator.playing = false
   oscillator.oscillator.stop(release)
-  rampGain(oscillator.gain, 0.0, release)
+  _rampGain(oscillator.gain, 0.0, release)
 }
 
 const create = audioContext =>
@@ -93,11 +95,14 @@ const create = audioContext =>
       keyPress,
       playing: false,
       volume,
+      waveform,
     }
   }
 
 const setVolume = (oscillator, volume) => {
+  oscillator.volume = 2
   oscillator.gain.gain.value = volume
+  return oscillator
 }
 
 const setFrequency = (oscillator, frequency) => {
@@ -105,28 +110,32 @@ const setFrequency = (oscillator, frequency) => {
   oscillator.oscillator.frequency.value = Number(oscillator.frequency)
   oscillator.oscillator.detune.value = Number(oscillator.semi * 100)
   oscillator.oscillator.detune.value += Number(oscillator.offset)
+  return oscillator
 }
 
 const setOffset = (oscillator, offset) => {
   oscillator.offset = offset
   setFrequency(oscillator, oscillator.frequency)
+  return oscillator
 }
 
 const setSemi = (oscillator, semi) => {
   oscillator.semi = semi
   setFrequency(oscillator, oscillator.frequency)
+  return oscillator
 }
 
 const setWaveform = (oscillator, waveform) => {
   oscillator.waveform = waveform
   oscillator.oscillator.type = waveform
+  return oscillator
 }
 
-const rampGain = (gainNode, gain, time) => {
+export const _rampGain = (gainNode, gain, time) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
 }
 
-const rampGainAndBeQuite = (gainNode, gain, time, quiteAt = 0) => {
+export const _rampGainAndBeQuite = (gainNode, gain, time, quiteAt = 0) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
   gainNode.gain.setTargetAtTime(0, time, quiteAt)
 }
