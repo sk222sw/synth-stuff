@@ -18,6 +18,7 @@
     "styled-components": "^2.1.2"
   },
   "devDependencies": {
+    "canvas": "1.6.7",
     "canvas-prebuilt": "^1.6.5-prerelease.1",
     "tslint-config-airbnb": "^5.2.1",
     "web-audio-test-api": "^0.5.2"
