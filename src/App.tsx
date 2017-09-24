@@ -176,6 +176,7 @@ class App extends React.Component<{}, any> {
         offset: o.offset,
         waveform: o.waveform,
         keyPress: key.keyPress,
+        semi: o.semi,
       })
     })
 

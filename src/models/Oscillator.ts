@@ -71,23 +71,25 @@ const stop = (oscillator, release) => {
 }
 
 const create = audioContext =>
-  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a' } = {}) => {
+  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0 } = {}) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
 
-    const value = Number(frequency) + Number(offset)
-    oscillator.frequency.value = value
+    oscillator.frequency.value = Number(frequency)
+    oscillator.detune.value = Number(semi * 100)
+    oscillator.detune.value += Number(offset)
+
     oscillator.type = waveform
 
-    gain.gain.value = 0
+    gain.gain.value = volume
 
     return {
       oscillator,
       gain,
       id,
       frequency,
-      offset: 0,
-      semi: 0,
+      offset,
+      semi,
       keyPress,
       playing: false,
       volume,
