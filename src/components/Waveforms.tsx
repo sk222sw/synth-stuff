@@ -1,38 +1,40 @@
 import * as R from 'ramda'
 import * as React from 'react'
-import { compose, withProps, withState } from 'recompose'
 import { sawtooth, sine, square, triangle } from '../assets/waveformImages'
 
-const nextEnumIndex = (en, index) => {
+export const nextEnumIndex = (en, index) => {
   const enumLength = Object.keys(en).reduce((acc, curr) => acc + 1, 0) - 1
   return index === enumLength ? 0 : R.add(index, 1)
 }
 
-const enhance = compose(
-  withState('selectedWaveformIndex', 'setSelectedWaveformIndex', 0),
-  withProps(props =>
-     ({ ...props, waveformEnum: R.mapObjIndexed(R.identity)(props.waveforms) }),
-  ),
-)
+export default class Waveforms extends React.Component<any, any> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedWaveformIndex: 0,
+      images: [sine, triangle, sawtooth, square],
+    }
+  }
 
-const Waveforms = enhance(({
-  waveforms,
-  selectedWaveformIndex,
-  setSelectedWaveformIndex,
-  waveformEnum,
-  onWaveformChange,
-}) => (
-  <div>
-    <div
-      onClick={() => {
-        const hej = nextEnumIndex(waveformEnum, selectedWaveformIndex)
-        setSelectedWaveformIndex(hej)
-        onWaveformChange(waveformEnum[hej])
-      }}
-    >
-      <img src={[sine, triangle, sawtooth, square][selectedWaveformIndex]} />
-    </div>
-  </div>
-))
+  readonly waveformEnum = R.mapObjIndexed(R.identity)(this.props.waveforms)
 
-export default Waveforms
+  imageUrl = () => {
+    return this.state.images[this.state.selectedWaveformIndex]
+  }
+
+  onWaveformClick = () => {
+    const index = nextEnumIndex(this.waveformEnum, this.state.selectedWaveformIndex)
+    this.setState({ selectedWaveformIndex: index })
+    this.props.onWaveformChange(this.waveformEnum[index])
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="waveform-container" onClick={this.onWaveformClick}>
+          <img src={this.imageUrl()} />
+        </div>
+      </div>
+    )
+  }
+}
