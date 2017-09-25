@@ -6,6 +6,7 @@ import hoo from './models/Synth'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import Envelope from './components/Envelope'
+import Filter from './components/Filter'
 import Keyboard from './components/Keyboard'
 import Oscillator from './components/Oscillator'
 import { CenteredRow, Row } from './components/styles/index'
@@ -76,6 +77,10 @@ class App extends React.Component<{}, any> {
           peakVolume: 0.5,
         },
       ],
+      filter: {
+        type: 'lowpass',
+        frequency: 0,
+      },
     }
   }
 
@@ -222,6 +227,10 @@ class App extends React.Component<{}, any> {
     this.setState({ envelope })
   }
 
+  setFilterFrequency = frequency => {
+    this.setState({ filter: { ...this.state.filter, frequency } })
+  }
+
   render() {
 
     return (
@@ -251,6 +260,11 @@ class App extends React.Component<{}, any> {
                 changeDecay={this.changeEnvelope('d')}
                 changeSustain={this.changeEnvelope('s')}
                 changeRelease={this.changeEnvelope('r')}
+              />
+              <Filter
+                frequency={this.state.filter.frequency}
+                type={this.state.filter.type}
+                onFrequencyChange={this.setFilterFrequency}
               />
             </CenteredRow>
             <Keyboard
