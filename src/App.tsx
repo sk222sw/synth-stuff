@@ -81,7 +81,7 @@ class App extends React.Component<{}, any> {
 
   componentWillMount() {
     const ctx = hoo.setup()
-    const synth = hoo.createSynth(ctx)({})
+    const synth = hoo.createSynth(ctx)
 
     const oscillatorConfigs =
       this.state.oscillatorConfigs.map((o, id) => ({ ...o,id }))
@@ -137,11 +137,6 @@ class App extends React.Component<{}, any> {
   setFrequency = (frequency) => {
     hoo.setFrequency(this.state.synth, frequency)
     this.setState({ frequency })
-  }
-
-  setVolume = volume => {
-    hoo.setVolume(this.state.synth, volume)
-    this.setState({ volume })
   }
 
   updateOscillatorConfig = (index, oscillator, field, value) => {

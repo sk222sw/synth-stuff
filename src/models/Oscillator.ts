@@ -15,28 +15,28 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
     oscillator.playing = true
 
     if (attack && !decay && !sustain) {
-      scheduleAttack(oscillator, attackEnd)
+      _scheduleAttack(oscillator, attackEnd)
     }
     if (!attack && decay && sustain) {
-      scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
+      _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
     }
     if (!attack && decay && !sustain) {
-      scheduleDecay(oscillator, attackEnd, decayEnd)
+      _scheduleDecay(oscillator, attackEnd, decayEnd)
     }
     if (attack && decay && !sustain) {
-      scheduleAttack(oscillator, attackEnd)
-      scheduleDecay(oscillator, attackEnd, decayEnd)
+      _scheduleAttack(oscillator, attackEnd)
+      _scheduleDecay(oscillator, attackEnd, decayEnd)
     }
     if (attack && decay && sustain) {
-      scheduleAttack(oscillator, attackEnd)
-      scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
+      _scheduleAttack(oscillator, attackEnd)
+      _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
     }
     if (!attack && !decay && sustain) {
-      scheduleSustain(oscillator, sustain, curr)
+      _scheduleSustain(oscillator, sustain, curr)
     }
     if (attack && !decay && sustain) {
-      scheduleAttack(oscillator, attackEnd)
-      scheduleSustain(oscillator, sustain, attackEnd)
+      _scheduleAttack(oscillator, attackEnd)
+      _scheduleSustain(oscillator, sustain, attackEnd)
     }
 
   }
@@ -44,21 +44,21 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
   return oscillator
 }
 
-const scheduleAttack = (oscillator, attackEnd) => {
+const _scheduleAttack = (oscillator, attackEnd) => {
   oscillator.gain.gain.value = 0
   _rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
 }
 
-const scheduleDecayAndSustain = (oscillator, sustain, attackEnd, decayEnd) => {
+const _scheduleDecayAndSustain = (oscillator, sustain, attackEnd, decayEnd) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
   _rampGain(oscillator.gain, oscillator.volume * sustain, decayEnd)
 }
 
-const scheduleSustain = (oscillator, sustain, curr) => {
+const _scheduleSustain = (oscillator, sustain, curr) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume * sustain, curr, 0)
 }
 
-const scheduleDecay = (oscillator, attackEnd, decayEnd) => {
+const _scheduleDecay = (oscillator, attackEnd, decayEnd) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
   _rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
 }
@@ -100,7 +100,7 @@ const create = audioContext =>
   }
 
 const setVolume = (oscillator, volume) => {
-  oscillator.volume = 2
+  oscillator.volume = volume
   oscillator.gain.gain.value = volume
   return oscillator
 }

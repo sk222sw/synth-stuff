@@ -2,17 +2,25 @@ import Oscillator from './Oscillator'
 
 let ctx
 
-const setup = (context = new AudioContext()) => ctx = context
+// perhaps remove this and make the user provide a context when creating a new synth?
+const setup = (context = new AudioContext()) => {
+  if (ctx)
+    throw Error('Max on audio context')
 
-const createSynth = (audioContext = ctx) => ({
-  oscillators = [],
-}) => ({
+  return ctx = context
+}
+
+// for testing purposes
+export const _deleteContext = () => ctx = null
+
+const createSynth = (audioContext = ctx, oscillators = []) => ({
   oscillators,
-  context: ctx,
+  context: audioContext,
 })
 
-const addOscillator = (synth, config) => {
+const addOscillator = (synth, config = {}) => {
   synth.oscillators.push(Oscillator.create(ctx)(config))
+  return synth
 }
 
 const play = (synth, envelope) => {
@@ -45,10 +53,6 @@ const setSemi = (oscillator, semi) => {
     Oscillator.setSemi(oscillator, semi)
 }
 
-const setVolume = (synth, volume) => {
-  synth.oscillators.forEach(o => Oscillator.setVolume(o, volume))
-}
-
 const setWaveform = (oscillator, waveform) => {
   if (oscillator)
     Oscillator.setWaveform(oscillator, waveform)
@@ -67,7 +71,6 @@ export default {
   play,
   stop,
   setFrequency,
-  setVolume,
   setOffset,
   setSemi,
   setWaveform,
