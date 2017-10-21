@@ -1,50 +1,49 @@
 const start = (audioContext, oscillator, currentTime, envelope, filter?) => {
-  if (!oscillator.playing) {
-    if (filter) {
-      oscillator.oscillator.connect(filter.filterNode)
-      filter.filterNode.connect(oscillator.gain)
-      oscillator.gain.connect(audioContext.destination)
-    } else {
-      oscillator.oscillator.connect(oscillator.gain)
-      oscillator.gain.connect(audioContext.destination)
-    }
+  if (oscillator.playing)
+    return oscillator
 
-    const curr = audioContext.currentTime
-    const { oscillator: oscillatorNode } = oscillator
+  if (filter) {
+    oscillator.oscillator.connect(filter.filterNode)
+    filter.filterNode.connect(oscillator.gain)
+  } else {
+    oscillator.oscillator.connect(oscillator.gain)
+  }
+  oscillator.gain.connect(audioContext.destination)
 
-    const { a: attack, d: decay, s: sustain } = envelope
+  const curr = audioContext.currentTime
+  const { oscillator: oscillatorNode } = oscillator
 
-    const attackEnd = curr + _millisecondToThousandOfASecond(attack)
-    const decayEnd = attackEnd + _millisecondToThousandOfASecond(decay)
+  const { a: attack, d: decay, s: sustain } = envelope
 
-    oscillatorNode.start()
-    oscillator.playing = true
+  const attackEnd = curr + _millisecondToThousandOfASecond(attack)
+  const decayEnd = attackEnd + _millisecondToThousandOfASecond(decay)
 
-    if (attack && !decay && !sustain) {
-      _scheduleAttack(oscillator, attackEnd)
-    }
-    if (!attack && decay && sustain) {
-      _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
-    }
-    if (!attack && decay && !sustain) {
-      _scheduleDecay(oscillator, attackEnd, decayEnd)
-    }
-    if (attack && decay && !sustain) {
-      _scheduleAttack(oscillator, attackEnd)
-      _scheduleDecay(oscillator, attackEnd, decayEnd)
-    }
-    if (attack && decay && sustain) {
-      _scheduleAttack(oscillator, attackEnd)
-      _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
-    }
-    if (!attack && !decay && sustain) {
-      _scheduleSustain(oscillator, sustain, curr)
-    }
-    if (attack && !decay && sustain) {
-      _scheduleAttack(oscillator, attackEnd)
-      _scheduleSustain(oscillator, sustain, attackEnd)
-    }
+  oscillatorNode.start()
+  oscillator.playing = true
 
+  if (attack && !decay && !sustain) {
+    _scheduleAttack(oscillator, attackEnd)
+  }
+  if (!attack && decay && sustain) {
+    _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
+  }
+  if (!attack && decay && !sustain) {
+    _scheduleDecay(oscillator, attackEnd, decayEnd)
+  }
+  if (attack && decay && !sustain) {
+    _scheduleAttack(oscillator, attackEnd)
+    _scheduleDecay(oscillator, attackEnd, decayEnd)
+  }
+  if (attack && decay && sustain) {
+    _scheduleAttack(oscillator, attackEnd)
+    _scheduleDecayAndSustain(oscillator, sustain, attackEnd, decayEnd)
+  }
+  if (!attack && !decay && sustain) {
+    _scheduleSustain(oscillator, sustain, curr)
+  }
+  if (attack && !decay && sustain) {
+    _scheduleAttack(oscillator, attackEnd)
+    _scheduleSustain(oscillator, sustain, attackEnd)
   }
 
   return oscillator

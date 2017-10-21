@@ -9,12 +9,12 @@ const setup = (context = new AudioContext()) => {
 }
 
 // for testing purposes
-export const _deleteContext = () => ctx = null
+export const _deleteContext = () =>
+  ctx = null
 
-const createSynth = (context = ctx) => ({ oscillators = [], filter = Filter.createFilter(context) } = {}) => ({
+const createSynth = (context = ctx) => ({ oscillators = [] } = {}) => ({
   oscillators,
   context,
-  filter,
 })
 
 const addOscillator = (synth, config = {}) => {
@@ -22,9 +22,13 @@ const addOscillator = (synth, config = {}) => {
   return synth
 }
 
-const play = (synth, envelope) => {
+const play = (synth, envelope, filter?) => {
   synth.oscillators.forEach(o => {
-    Oscillator.start(ctx, o, ctx.currentTime, envelope, synth.filter)
+    const filterNode = filter
+      ? Filter.createFilter(ctx, filter)
+      : undefined
+
+    Oscillator.start(ctx, o, ctx.currentTime, envelope, filterNode)
   })
 }
 
@@ -64,7 +68,6 @@ const stopOscillators = (synth, oscillators, release) => {
 }
 
 const setFilterFrequency = (synth, frequency) => {
-  console.log(synth.filter, frequency)
   Filter.setFrequency(synth.filter, frequency)
 }
 

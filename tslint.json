@@ -30,6 +30,7 @@
     "jsx-alignment": false,
     "max-line-length": [
       140
-    ]
+    ],
+    "no-submodule-imports": false
   }
 }
