@@ -2,10 +2,14 @@ import * as React from 'react'
 import Knob from 'react-canvas-knob'
 
 export default class Filter extends React.Component<any, any> {
+  onTypeClick = () => {
+    this.props.onTypeChange()
+  }
+
   render() {
     return (
       <div>
-        <div>
+        <div onClick={this.props.onTypeClick}>
           {this.props.type}
         </div>
         <Knob

@@ -129,7 +129,12 @@ describe('Oscillator()', () => {
 
   describe('stop()', () => {
     const osc = setup({ volume: 2 })
-    Oscillator.start(context, osc, context.currentTime, { a: 0, d: 0, s: 0, r: 0 })
+    Oscillator.start(
+      context,
+      osc,
+      context.currentTime,
+      { a: 0, d: 0, s: 0, r: 0 },
+    )
 
     expect(osc.playing).toBeTruthy()
     expect(osc.gain.gain.value).toBe(2)

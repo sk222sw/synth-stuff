@@ -1,7 +1,13 @@
-const start = (audioContext, oscillator, currentTime, envelope) => {
+const start = (audioContext, oscillator, currentTime, envelope, filter?) => {
   if (!oscillator.playing) {
-    oscillator.oscillator.connect(oscillator.gain)
-    oscillator.gain.connect(audioContext.destination)
+    if (filter) {
+      oscillator.oscillator.connect(filter.filterNode)
+      filter.filterNode.connect(oscillator.gain)
+      oscillator.gain.connect(audioContext.destination)
+    } else {
+      oscillator.oscillator.connect(oscillator.gain)
+      oscillator.gain.connect(audioContext.destination)
+    }
 
     const curr = audioContext.currentTime
     const { oscillator: oscillatorNode } = oscillator
@@ -65,9 +71,12 @@ const _scheduleDecay = (oscillator, attackEnd, decayEnd) => {
 
 export const _millisecondToThousandOfASecond = x => x / 1000
 
-const stop = (oscillator, release) => {
+const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: OscillatorNode}, release) => {
   oscillator.gain.gain.cancelScheduledValues(0)
   oscillator.playing = false
+  oscillator.oscillator.onended = () => {
+    oscillator.gain.disconnect()
+  }
   oscillator.oscillator.stop(release)
   _rampGain(oscillator.gain, 0.0, release)
 }

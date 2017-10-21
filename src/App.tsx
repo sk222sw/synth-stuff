@@ -69,24 +69,24 @@ class App extends React.Component<{}, any> {
           waveform: 'sine',
           peakVolume: 0.5,
         },
-        {
-          offset: 0,
-          playing: false,
-          semi: 0,
-          waveform: 'sine',
-          peakVolume: 0.5,
-        },
+        // {
+        //   offset: 0,
+        //   playing: false,
+        //   semi: 0,
+        //   waveform: 'sine',
+        //   peakVolume: 0.5,
+        // },
       ],
       filter: {
         type: 'lowpass',
-        frequency: 0,
+        frequency: 7000,
       },
     }
   }
 
   componentWillMount() {
     const ctx = hoo.setup()
-    const synth = hoo.createSynth(ctx)
+    const synth = hoo.createSynth(ctx)()
 
     const oscillatorConfigs =
       this.state.oscillatorConfigs.map((o, id) => ({ ...o,id }))
@@ -229,10 +229,10 @@ class App extends React.Component<{}, any> {
 
   setFilterFrequency = frequency => {
     this.setState({ filter: { ...this.state.filter, frequency } })
+    hoo.setFilterFrequency(this.state.synth, frequency)
   }
 
   render() {
-
     return (
       <StyledApp>
         <StyledSynth>

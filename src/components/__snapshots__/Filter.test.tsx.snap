@@ -9,7 +9,9 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div>
-    <div>
+    <div
+        onClick={undefined}
+    >
         lowpass
     </div>
     <Knob
@@ -42,7 +44,9 @@ ShallowWrapper {
 </div>,
   "nodes": Array [
     <div>
-      <div>
+      <div
+            onClick={undefined}
+      >
             lowpass
       </div>
       <Knob
@@ -91,6 +95,7 @@ ShallowWrapper {
       "_instance": Filter {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "onTypeClick": [Function],
         "props": Object {
           "frequency": 200,
           "onFrequencyChange": [Function],
@@ -117,7 +122,9 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div>
-          <div>
+          <div
+                    onClick={undefined}
+          >
                     lowpass
           </div>
           <Knob
@@ -150,7 +157,9 @@ ShallowWrapper {
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div>
-          <div>
+          <div
+                    onClick={undefined}
+          >
                     lowpass
           </div>
           <Knob

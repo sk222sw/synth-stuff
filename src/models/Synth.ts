@@ -1,21 +1,20 @@
+import Filter from './Filter'
 import Oscillator from './Oscillator'
 
 let ctx
 
 // perhaps remove this and make the user provide a context when creating a new synth?
 const setup = (context = new AudioContext()) => {
-  if (ctx)
-    throw Error('Max on audio context')
-
   return ctx = context
 }
 
 // for testing purposes
 export const _deleteContext = () => ctx = null
 
-const createSynth = (audioContext = ctx, oscillators = []) => ({
+const createSynth = (context = ctx) => ({ oscillators = [], filter = Filter.createFilter(context) } = {}) => ({
   oscillators,
-  context: audioContext,
+  context,
+  filter,
 })
 
 const addOscillator = (synth, config = {}) => {
@@ -25,7 +24,7 @@ const addOscillator = (synth, config = {}) => {
 
 const play = (synth, envelope) => {
   synth.oscillators.forEach(o => {
-    Oscillator.start(ctx, o, ctx.currentTime, envelope)
+    Oscillator.start(ctx, o, ctx.currentTime, envelope, synth.filter)
   })
 }
 
@@ -64,6 +63,11 @@ const stopOscillators = (synth, oscillators, release) => {
   })
 }
 
+const setFilterFrequency = (synth, frequency) => {
+  console.log(synth.filter, frequency)
+  Filter.setFrequency(synth.filter, frequency)
+}
+
 export default {
   setup,
   createSynth,
@@ -76,4 +80,5 @@ export default {
   setWaveform,
   stopOscillators,
   setOscillatorVolume,
+  setFilterFrequency,
 }
