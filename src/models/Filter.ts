@@ -1,11 +1,11 @@
-const createFilter = (audioContext: AudioContext, { frequency = 7000, filterType = 'lowpass' } = {}) => {
+const createFilter = (audioContext: AudioContext, { frequency = 7000, type = 'lowpass' } = {}) => {
+  console.log(type)
   const filterNode = audioContext.createBiquadFilter()
-  filterNode.type = filterType as BiquadFilterType
+  filterNode.type = type as BiquadFilterType
   filterNode.frequency.value = frequency
-
   return {
     frequency,
-    filterType,
+    type,
     filterNode,
   }
 }

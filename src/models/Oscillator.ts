@@ -1,10 +1,12 @@
-const start = (audioContext, oscillator, currentTime, envelope, filter?) => {
+import Filter from './Filter'
+
+const start = (audioContext, oscillator, currentTime, envelope) => {
   if (oscillator.playing)
     return oscillator
 
-  if (filter) {
-    oscillator.oscillator.connect(filter.filterNode)
-    filter.filterNode.connect(oscillator.gain)
+  if (oscillator.filter) {
+    oscillator.oscillator.connect(oscillator.filter.filterNode)
+    oscillator.filter.filterNode.connect(oscillator.gain)
   } else {
     oscillator.oscillator.connect(oscillator.gain)
   }
@@ -81,9 +83,10 @@ const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: Oscilla
 }
 
 const create = audioContext =>
-  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0 } = {}) => {
+  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0, filter = {} } = {}) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
+    const filterNode = filter ? Filter.createFilter(audioContext, filter) : undefined
 
     oscillator.frequency.value = Number(frequency)
     oscillator.detune.value = Number(semi * 100)
@@ -104,6 +107,7 @@ const create = audioContext =>
       playing: false,
       volume,
       waveform,
+      filter: filterNode,
     }
   }
 

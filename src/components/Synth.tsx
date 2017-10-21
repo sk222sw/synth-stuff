@@ -59,17 +59,17 @@ class Synth extends React.Component<{}, any> {
           waveform: 'sine',
           peakVolume: 0.5,
         },
-        // {
-        //   offset: 0,
-        //   playing: false,
-        //   semi: 0,
-        //   waveform: 'sine',
-        //   peakVolume: 0.5,
-        // },
+        {
+          offset: 0,
+          playing: false,
+          semi: 0,
+          waveform: 'sine',
+          peakVolume: 0.5,
+        },
       ],
       filter: {
         type: 'lowpass',
-        frequency: 7000,
+        frequency: 1000,
       },
     }
   }
@@ -115,6 +115,11 @@ class Synth extends React.Component<{}, any> {
       hoo.setWaveform(this.state.synth.oscillators[index], waveform)
 
     this.updateOscillatorConfig(index, current, 'waveform', waveform)
+  }
+
+  setFilterFrequency = frequency => {
+    hoo.setFilterFrequency(this.state.synth.oscillators, frequency)
+    this.setState({ filter: { ...this.state.filter, frequency } })
   }
 
   setSemi = oscillator => value => {
@@ -167,12 +172,13 @@ class Synth extends React.Component<{}, any> {
         waveform: o.waveform,
         keyPress: key.keyPress,
         semi: o.semi,
+        filter: this.state.filter,
       })
     })
 
     this.setOscillatorsToPlaying()
 
-    hoo.play(this.state.synth, this.state.envelope, this.state.filter)
+    hoo.play(this.state.synth, this.state.envelope)
   }
 
   onKeyClick = this.playWithoutPortamento
@@ -215,10 +221,6 @@ class Synth extends React.Component<{}, any> {
     }
 
     this.setState({ envelope })
-  }
-
-  setFilterFrequency = frequency => {
-    this.setState({ filter: { ...this.state.filter, frequency } })
   }
 
   render() {

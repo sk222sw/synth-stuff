@@ -22,13 +22,9 @@ const addOscillator = (synth, config = {}) => {
   return synth
 }
 
-const play = (synth, envelope, filter?) => {
+const play = (synth, envelope) => {
   synth.oscillators.forEach(o => {
-    const filterNode = filter
-      ? Filter.createFilter(ctx, filter)
-      : undefined
-
-    Oscillator.start(ctx, o, ctx.currentTime, envelope, filterNode)
+    Oscillator.start(ctx, o, ctx.currentTime, envelope)
   })
 }
 
@@ -67,8 +63,10 @@ const stopOscillators = (synth, oscillators, release) => {
   })
 }
 
-const setFilterFrequency = (synth, frequency) => {
-  Filter.setFrequency(synth.filter, frequency)
+const setFilterFrequency = (oscillators, frequency) => {
+  oscillators.forEach(o => {
+    Filter.setFrequency(o.filter, frequency)
+  })
 }
 
 export default {

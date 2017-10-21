@@ -2,14 +2,10 @@ import * as React from 'react'
 import Knob from 'react-canvas-knob'
 
 export default class Filter extends React.Component<any, any> {
-  onTypeClick = () => {
-    this.props.onTypeChange()
-  }
-
   render() {
     return (
       <div>
-        <div onClick={this.props.onTypeClick}>
+        <div>
           {this.props.type}
         </div>
         <Knob
@@ -20,7 +16,6 @@ export default class Filter extends React.Component<any, any> {
           onChange={this.props.onFrequencyChange}
           onChangeEnd={this.props.onFrequencyChange}
           width={50}
-          height={50}
           thickness={0.3}
           angleOffset={-125}
           angleArc={250}
