@@ -9,9 +9,7 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div>
-    <div
-        onClick={undefined}
-    >
+    <div>
         lowpass
     </div>
     <Knob
@@ -26,7 +24,7 @@ ShallowWrapper {
         fgColor="#EA2"
         font="Arial"
         fontWeight="bold"
-        height={50}
+        height={200}
         inputColor=""
         lineCap="butt"
         log={false}
@@ -44,9 +42,7 @@ ShallowWrapper {
 </div>,
   "nodes": Array [
     <div>
-      <div
-            onClick={undefined}
-      >
+      <div>
             lowpass
       </div>
       <Knob
@@ -61,7 +57,7 @@ ShallowWrapper {
             fgColor="#EA2"
             font="Arial"
             fontWeight="bold"
-            height={50}
+            height={200}
             inputColor=""
             lineCap="butt"
             log={false}
@@ -95,7 +91,6 @@ ShallowWrapper {
       "_instance": Filter {
         "_reactInternalInstance": [Circular],
         "context": Object {},
-        "onTypeClick": [Function],
         "props": Object {
           "frequency": 200,
           "onFrequencyChange": [Function],
@@ -122,9 +117,7 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div>
-          <div
-                    onClick={undefined}
-          >
+          <div>
                     lowpass
           </div>
           <Knob
@@ -139,7 +132,7 @@ ShallowWrapper {
                     fgColor="#EA2"
                     font="Arial"
                     fontWeight="bold"
-                    height={50}
+                    height={200}
                     inputColor=""
                     lineCap="butt"
                     log={false}
@@ -157,9 +150,7 @@ ShallowWrapper {
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div>
-          <div
-                    onClick={undefined}
-          >
+          <div>
                     lowpass
           </div>
           <Knob
@@ -174,7 +165,7 @@ ShallowWrapper {
                     fgColor="#EA2"
                     font="Arial"
                     fontWeight="bold"
-                    height={50}
+                    height={200}
                     inputColor=""
                     lineCap="butt"
                     log={false}

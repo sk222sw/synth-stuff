@@ -44,6 +44,30 @@ ShallowWrapper {
                   ]
             }
         />
+        <Oscillator
+            oscillator={
+                Object {
+                    "id": 1,
+                    "offset": 0,
+                    "peakVolume": 0.5,
+                    "playing": false,
+                    "semi": 0,
+                    "waveform": "sine",
+                  }
+            }
+            setOffset={[Function]}
+            setOscillatorVolume={[Function]}
+            setSemi={[Function]}
+            setWaveform={[Function]}
+            waveforms={
+                Array [
+                    "sine",
+                    "triangle",
+                    "sawtooth",
+                    "square",
+                  ]
+            }
+        />
     </styled.div>
     <Styled(styled.div)>
         <Envelope
@@ -61,7 +85,7 @@ ShallowWrapper {
             }
         />
         <Filter
-            frequency={7000}
+            frequency={1000}
             onFrequencyChange={[Function]}
             type="lowpass"
         />
@@ -109,6 +133,30 @@ ShallowWrapper {
                             ]
                   }
             />
+            <Oscillator
+                  oscillator={
+                        Object {
+                              "id": 1,
+                              "offset": 0,
+                              "peakVolume": 0.5,
+                              "playing": false,
+                              "semi": 0,
+                              "waveform": "sine",
+                            }
+                  }
+                  setOffset={[Function]}
+                  setOscillatorVolume={[Function]}
+                  setSemi={[Function]}
+                  setWaveform={[Function]}
+                  waveforms={
+                        Array [
+                              "sine",
+                              "triangle",
+                              "sawtooth",
+                              "square",
+                            ]
+                  }
+            />
       </styled.div>
       <Styled(styled.div)>
             <Envelope
@@ -126,7 +174,7 @@ ShallowWrapper {
                   }
             />
             <Filter
-                  frequency={7000}
+                  frequency={1000}
                   onFrequencyChange={[Function]}
                   type="lowpass"
             />
@@ -174,7 +222,7 @@ ShallowWrapper {
             "s": 0.5,
           },
           "filter": Object {
-            "frequency": 7000,
+            "frequency": 1000,
             "type": "lowpass",
           },
           "frequency": 880,
@@ -183,6 +231,14 @@ ShallowWrapper {
           "oscillatorConfigs": Array [
             Object {
               "id": 0,
+              "offset": 0,
+              "peakVolume": 0.5,
+              "playing": false,
+              "semi": 0,
+              "waveform": "sine",
+            },
+            Object {
+              "id": 1,
               "offset": 0,
               "peakVolume": 0.5,
               "playing": false,
@@ -261,6 +317,30 @@ ShallowWrapper {
                                                 ]
                               }
                     />
+                    <Oscillator
+                              oscillator={
+                                        Object {
+                                                  "id": 1,
+                                                  "offset": 0,
+                                                  "peakVolume": 0.5,
+                                                  "playing": false,
+                                                  "semi": 0,
+                                                  "waveform": "sine",
+                                                }
+                              }
+                              setOffset={[Function]}
+                              setOscillatorVolume={[Function]}
+                              setSemi={[Function]}
+                              setWaveform={[Function]}
+                              waveforms={
+                                        Array [
+                                                  "sine",
+                                                  "triangle",
+                                                  "sawtooth",
+                                                  "square",
+                                                ]
+                              }
+                    />
           </styled.div>
           <Styled(styled.div)>
                     <Envelope
@@ -278,7 +358,7 @@ ShallowWrapper {
                               }
                     />
                     <Filter
-                              frequency={7000}
+                              frequency={1000}
                               onFrequencyChange={[Function]}
                               type="lowpass"
                     />
@@ -326,6 +406,30 @@ ShallowWrapper {
                                                 ]
                               }
                     />
+                    <Oscillator
+                              oscillator={
+                                        Object {
+                                                  "id": 1,
+                                                  "offset": 0,
+                                                  "peakVolume": 0.5,
+                                                  "playing": false,
+                                                  "semi": 0,
+                                                  "waveform": "sine",
+                                                }
+                              }
+                              setOffset={[Function]}
+                              setOscillatorVolume={[Function]}
+                              setSemi={[Function]}
+                              setWaveform={[Function]}
+                              waveforms={
+                                        Array [
+                                                  "sine",
+                                                  "triangle",
+                                                  "sawtooth",
+                                                  "square",
+                                                ]
+                              }
+                    />
           </styled.div>
           <Styled(styled.div)>
                     <Envelope
@@ -343,7 +447,7 @@ ShallowWrapper {
                               }
                     />
                     <Filter
-                              frequency={7000}
+                              frequency={1000}
                               onFrequencyChange={[Function]}
                               type="lowpass"
                     />
