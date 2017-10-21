@@ -27,6 +27,7 @@ const Keyboard = ({ keys = [] as any[], currentKeys, onKeyClick }) => (
           name={key.name}
           frequency={key.frequency}
           onClick={onKeyClick}
+          keyPress={key.keyPress}
         />
       </StyledKey>,
     )}

@@ -262,6 +262,7 @@ ShallowWrapper {
             "square",
           ],
         },
+        "stopPlaying": [Function],
         "updateOscillatorConfig": [Function],
         "updater": Object {
           "enqueueCallback": [Function],

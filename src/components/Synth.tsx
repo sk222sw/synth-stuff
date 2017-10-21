@@ -78,10 +78,16 @@ class Synth extends React.Component<{}, any> {
     const ctx = hoo.setup()
     const synth = hoo.createSynth(ctx)()
 
+    window.addEventListener('mouseup', this.stopPlaying)
+
     const oscillatorConfigs =
       this.state.oscillatorConfigs.map((o, id) => ({ ...o,id }))
 
     this.setState({ synth, oscillatorConfigs })
+  }
+
+  componentWillUnMount() {
+    window.removeEventListener('mouseup', this.stopPlaying)
   }
 
   setOffset = (oscillator) => (offset) => {
@@ -181,7 +187,9 @@ class Synth extends React.Component<{}, any> {
     hoo.play(this.state.synth, this.state.envelope)
   }
 
-  onKeyClick = this.playWithoutPortamento
+  onKeyClick = key => {
+    this.handleKeyDown({ key: key.keyPress })
+  }
 
   handleKeyDown = ({ key }) => {
     if (keyExists(key) && !keyIsPressed(this.state.pressedKeys, key)) {
@@ -194,6 +202,12 @@ class Synth extends React.Component<{}, any> {
         pressedKeys: [...this.state.pressedKeys, key],
       })
     }
+  }
+
+  stopPlaying = () => {
+    this.state.pressedKeys.forEach(key => {
+      this.handleKeyUp({ key })
+    })
   }
 
   handleKeyUp = ({ key }) => {

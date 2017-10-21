@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-const Key = ({ name, frequency, onClick }) => (
+const Key = ({ name, frequency, onClick, keyPress }) => (
   <div
-    onClick={() => onClick({ name, frequency })}
+    onMouseDown={() => onClick({ name, frequency, keyPress })}
   >
     {name}
   </div>
