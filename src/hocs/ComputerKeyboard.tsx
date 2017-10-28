@@ -1,6 +1,11 @@
 import * as React from 'react'
 
-class ComputerKeyboard extends React.Component<any, any> {
+interface Props {
+  onKeyDown: (event: Event) => void
+  onKeyUp: (event: Event) => void
+}
+
+class ComputerKeyboard extends React.Component<Props, {}> {
   componentWillMount() {
     window.addEventListener('keydown', this.props.onKeyDown, false)
     window.addEventListener('keyup', this.props.onKeyUp, false)

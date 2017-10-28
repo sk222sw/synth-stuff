@@ -26,6 +26,15 @@ const StyledOscillator = styled.div`
   width: 250px;
 `
 
+interface Props {
+  setOscillatorVolume: (value: number) => void
+  setOffset: (oscillator: Oscillator) => (value: number) => void
+  setSemi: (value: number) => void
+  setWaveform: (value: string) => void
+  oscillator: {}
+  waveforms: string[]
+}
+
 const Oscillator = ({
   setOscillatorVolume,
   setOffset,
@@ -33,7 +42,7 @@ const Oscillator = ({
   setWaveform,
   oscillator,
   waveforms,
-}) => (
+}: Props) => (
   <StyledOscillator>
     <Row>
       <StyledInputContainer>
@@ -62,7 +71,7 @@ const Oscillator = ({
           max="50"
           min="-50"
           value={oscillator.offset}
-          onChange={v => setOffset(oscillator)(v.target.value)}
+          onChange={(v: HtmlInEve) => setOffset(oscillator)(v.target.value)}
         />
         <Label>
           Cent
@@ -74,7 +83,7 @@ const Oscillator = ({
           max="24"
           min="-24"
           value={oscillator.semi}
-          onChange={v => setSemi(oscillator)(v.target.value)}
+          onChange={(event: any) => setSemi(oscillator)(event.target.value)}
         />
         <Label>
           Semi

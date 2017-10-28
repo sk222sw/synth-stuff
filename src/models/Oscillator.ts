@@ -1,6 +1,25 @@
-import Filter from './Filter'
+import { IEnvelope } from '../components/Envelope'
+import Filter, { IFilter } from './Filter'
 
-const start = (audioContext, oscillator, currentTime, envelope) => {
+export interface IOscillatorConfig {
+  id: number
+  frequency: number
+  offset: number
+  semi: number
+  keyPress?: string
+  playing: boolean
+  volume: number
+  waveform: string
+  filter?: IFilter
+  peakVolume: number
+}
+
+export interface IOscillator extends IOscillatorConfig {
+  oscillator: OscillatorNode
+  gain: GainNode
+}
+
+const start = (audioContext: AudioContext, oscillator: IOscillator, currentTime: number, envelope: IEnvelope) => {
   if (oscillator.playing)
     return oscillator
 
@@ -51,28 +70,28 @@ const start = (audioContext, oscillator, currentTime, envelope) => {
   return oscillator
 }
 
-const _scheduleAttack = (oscillator, attackEnd) => {
+const _scheduleAttack = (oscillator: IOscillator, attackEnd: number) => {
   oscillator.gain.gain.value = 0
   _rampGainAndBeQuite(oscillator.gain, oscillator.volume, attackEnd)
 }
 
-const _scheduleDecayAndSustain = (oscillator, sustain, attackEnd, decayEnd) => {
+const _scheduleDecayAndSustain = (oscillator: IOscillator, sustain: number, attackEnd: number, decayEnd: number) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
   _rampGain(oscillator.gain, oscillator.volume * sustain, decayEnd)
 }
 
-const _scheduleSustain = (oscillator, sustain, curr) => {
+const _scheduleSustain = (oscillator: IOscillator, sustain: number, curr: number) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume * sustain, curr, 0)
 }
 
-const _scheduleDecay = (oscillator, attackEnd, decayEnd) => {
+const _scheduleDecay = (oscillator: IOscillator, attackEnd: number, decayEnd: number) => {
   oscillator.gain.gain.setTargetAtTime(oscillator.volume, attackEnd, 0)
   _rampGainAndBeQuite(oscillator.gain, 0, decayEnd)
 }
 
-export const _millisecondToThousandOfASecond = x => x / 1000
+export const _millisecondToThousandOfASecond = (x: number) => x / 1000
 
-const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: OscillatorNode}, release) => {
+const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: OscillatorNode}, release: number) => {
   oscillator.gain.gain.cancelScheduledValues(0)
   oscillator.playing = false
   oscillator.oscillator.onended = () => {
@@ -82,8 +101,8 @@ const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: Oscilla
   _rampGain(oscillator.gain, 0.0, release)
 }
 
-const create = audioContext =>
-  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0, filter = {} } = {}) => {
+const create = (audioContext: AudioContext) =>
+  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0, filter }: IOscillatorConfig) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
     const filterNode = filter ? Filter.createFilter(audioContext, filter) : undefined
@@ -92,7 +111,7 @@ const create = audioContext =>
     oscillator.detune.value = Number(semi * 100)
     oscillator.detune.value += Number(offset)
 
-    oscillator.type = waveform
+    oscillator.type = waveform as OscillatorType
 
     gain.gain.value = volume
 
@@ -111,13 +130,13 @@ const create = audioContext =>
     }
   }
 
-const setVolume = (oscillator, volume) => {
+const setVolume = (oscillator: IOscillator, volume: number) => {
   oscillator.volume = volume
   oscillator.gain.gain.value = volume
   return oscillator
 }
 
-const setFrequency = (oscillator, frequency) => {
+const setFrequency = (oscillator: IOscillator, frequency: number) => {
   oscillator.frequency = frequency
   oscillator.oscillator.frequency.value = Number(oscillator.frequency)
   oscillator.oscillator.detune.value = Number(oscillator.semi * 100)
@@ -125,29 +144,29 @@ const setFrequency = (oscillator, frequency) => {
   return oscillator
 }
 
-const setOffset = (oscillator, offset) => {
+const setOffset = (oscillator: IOscillator, offset: number) => {
   oscillator.offset = offset
   setFrequency(oscillator, oscillator.frequency)
   return oscillator
 }
 
-const setSemi = (oscillator, semi) => {
+const setSemi = (oscillator: IOscillator, semi: number) => {
   oscillator.semi = semi
   setFrequency(oscillator, oscillator.frequency)
   return oscillator
 }
 
-const setWaveform = (oscillator, waveform) => {
+const setWaveform = (oscillator: IOscillator, waveform: string) => {
   oscillator.waveform = waveform
-  oscillator.oscillator.type = waveform
+  oscillator.oscillator.type = waveform as OscillatorType
   return oscillator
 }
 
-export const _rampGain = (gainNode, gain, time) => {
+export const _rampGain = (gainNode: GainNode, gain: number, time: number) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
 }
 
-export const _rampGainAndBeQuite = (gainNode, gain, time, quiteAt = 0) => {
+export const _rampGainAndBeQuite = (gainNode: GainNode, gain: number, time: number, quiteAt = 0) => {
   gainNode.gain.linearRampToValueAtTime(gain, time)
   gainNode.gain.setTargetAtTime(0, time, quiteAt)
 }

@@ -1,6 +1,19 @@
 import * as React from 'react'
 
-const Key = ({ name, frequency, onClick, keyPress }) => (
+export interface KeyType {
+  name: string
+  frequency: number
+  keyPress: string
+}
+
+interface Props {
+  name: string,
+  frequency: number,
+  keyPress: string,
+  onClick: (key: KeyType) => void,
+}
+
+const Key = ({ name, frequency, onClick, keyPress }: Props) => (
   <div
     onMouseDown={() => onClick({ name, frequency, keyPress })}
   >

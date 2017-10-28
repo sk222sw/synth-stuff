@@ -1,17 +1,13 @@
 import 'web-audio-test-api'
-import { _deleteContext, default as Synth } from './Synth'
+import { default as Synth } from './Synth'
 
 const context = new AudioContext()
-let synthModule
+let synthModule: any
 let synth
 
 describe('Synth', () => {
   beforeEach(() => {
     synthModule = Synth
-  })
-
-  afterEach(() => {
-    _deleteContext()
   })
 
   describe('setup()', () => {

@@ -1,71 +1,74 @@
+import { IEnvelope } from '../components/Envelope'
 import Filter from './Filter'
-import Oscillator from './Oscillator'
+import Oscillator, { IOscillator, IOscillatorConfig } from './Oscillator'
 
-let ctx
+let ctx: AudioContext
 
 // perhaps remove this and make the user provide a context when creating a new synth?
 const setup = (context = new AudioContext()) => {
   return ctx = context
 }
 
-// for testing purposes
-export const _deleteContext = () =>
-  ctx = null
+export interface ISynth {
+  oscillators: IOscillator[]
+  context: AudioContext
+}
 
-const createSynth = (context = ctx) => ({ oscillators = [] } = {}) => ({
+const createSynth = (context = ctx) => ({ oscillators = [] }: {oscillators: IOscillator[]}) => ({
   oscillators,
   context,
 })
 
-const addOscillator = (synth, config = {}) => {
+const addOscillator = (synth: ISynth, config: IOscillatorConfig) => {
   synth.oscillators.push(Oscillator.create(ctx)(config))
   return synth
 }
 
-const play = (synth, envelope) => {
+const play = (synth: ISynth, envelope: IEnvelope) => {
   synth.oscillators.forEach(o => {
     Oscillator.start(ctx, o, ctx.currentTime, envelope)
   })
 }
 
-const stop = (synth, time) => {
+const stop = (synth: ISynth, time: number) => {
   synth.oscillators.forEach(o => Oscillator.stop(o, time))
   synth.oscillators = []
 }
 
-const setFrequency = (synth, frequency) => {
+const setFrequency = (synth: ISynth, frequency: number) => {
   synth.oscillators.forEach(o => Oscillator.setFrequency(o, frequency))
 }
 
-const setOffset = (oscillator, offset) => {
+const setOffset = (oscillator: IOscillator, offset: number) => {
   if (oscillator)
     Oscillator.setOffset(oscillator, offset)
 }
 
-const setOscillatorVolume = (oscillator, volume) => {
+const setOscillatorVolume = (oscillator: IOscillator, volume: number) => {
   if (oscillator)
     Oscillator.setVolume(oscillator, volume)
 }
 
-const setSemi = (oscillator, semi) => {
+const setSemi = (oscillator: IOscillator, semi: number) => {
   if (oscillator)
     Oscillator.setSemi(oscillator, semi)
 }
 
-const setWaveform = (oscillator, waveform) => {
+const setWaveform = (oscillator: IOscillator, waveform: string) => {
   if (oscillator)
     Oscillator.setWaveform(oscillator, waveform)
 }
 
-const stopOscillators = (synth, oscillators, release) => {
+const stopOscillators = (synth: ISynth, oscillators: IOscillator[], release: number) => {
   oscillators.forEach(oscillator => {
     Oscillator.stop(oscillator, ctx.currentTime + release / 1000)
   })
 }
 
-const setFilterFrequency = (oscillators, frequency) => {
+const setFilterFrequency = (oscillators: IOscillator[], frequency: number) => {
   oscillators.forEach(o => {
-    Filter.setFrequency(o.filter, frequency)
+    if (o.filter)
+      Filter.setFrequency(o.filter, frequency)
   })
 }
 

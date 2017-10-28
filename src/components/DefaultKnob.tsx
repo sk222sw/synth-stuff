@@ -1,6 +1,20 @@
 import * as React from 'react'
 import Knob from 'react-canvas-knob'
 
+interface Props {
+  value: number
+  onChange: (value: number) => void
+  onChangeEnd: (value: number) => void
+  min: number
+  max: number
+  step: number
+  width: number
+  height: number
+  thickness: number
+  angleOffset: number
+  angleArc: number
+}
+
 const DefaultKnob = ({
   value,
   onChange,
@@ -13,7 +27,7 @@ const DefaultKnob = ({
   thickness = 0.3,
   angleOffset = -125,
   angleArc = 250,
-}) => (
+}: Props) => (
   <Knob
     value={value}
     max={min}

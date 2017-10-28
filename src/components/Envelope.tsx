@@ -7,13 +7,28 @@ const StyledEnvelope = styled(Row)`
   margin-left: 24px;
 `
 
+export interface IEnvelope {
+  a: number
+  d: number
+  s: number
+  r: number
+}
+
+interface Props {
+  envelope: IEnvelope
+  changeAttack: (value: number) => void
+  changeDecay: (value: number) => void
+  changeSustain: (value: number) => void
+  changeRelease: (value: number) => void
+}
+
 const Envelope = ({
   envelope,
   changeAttack,
   changeDecay,
   changeSustain,
   changeRelease,
-}) => (
+}: Props) => (
   <StyledEnvelope>
     <EnvelopeItem
       name={'A'}

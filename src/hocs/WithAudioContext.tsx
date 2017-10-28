@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-function withAudioContext(WrappedComponent) {
+function withAudioContext(WrappedComponent: any) {
   return class extends React.Component<{}, {audioContext: AudioContext}> {
-    constructor(props) {
+    constructor(props: any) {
       super(props)
       const audioContext = new window.AudioContext()
       this.state = { audioContext }

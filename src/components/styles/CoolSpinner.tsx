@@ -64,7 +64,7 @@ z-index: 2;
 `
 
 class CoolSpinner extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
 
     this.state = {

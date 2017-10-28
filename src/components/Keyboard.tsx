@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import styled from 'styled-components'
-import Key from './Key'
+import Key, {KeyType} from './Key'
 import { Row } from './styles/index'
 
 const StyledKey = styled.div`
@@ -16,7 +16,13 @@ const StyledKeyboard = styled(Row)`
   justify-content: space-around;
 `
 
-const Keyboard = ({ keys = [] as any[], currentKeys, onKeyClick }) => (
+interface Props {
+  keys: KeyType[]
+  currentKeys: string[]
+  onKeyClick: (key: string) => void
+}
+
+const Keyboard = ({ keys = [] as any[], currentKeys, onKeyClick }: Props) => (
   <StyledKeyboard>
     {keys.map((key, i) =>
       <StyledKey
