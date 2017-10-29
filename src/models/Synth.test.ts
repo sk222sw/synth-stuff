@@ -43,19 +43,19 @@ describe('Synth', () => {
     })
   })
 
-  // describe('stop', () => {
-  //   it('should empty the oscillators array', () => {
-  //     synthModule.setup()
-  //     synth = synthModule.createSynth()
+  describe('stop', () => {
+    it('should empty the oscillators array', () => {
+      synthModule.setup()
+      synth = synthModule.createSynth(context)
 
-  //     synthModule.addOscillator(synth)
-  //     synthModule.addOscillator(synth, { frequency: 2900 })
+      synthModule.addOscillator(synth)
+      synthModule.addOscillator(synth, { frequency: 2900 })
 
-  //     synthModule.play(synth, { a: 0, d: 0, s: 0, r: 0 })
+      synthModule.play(synth, { a: 0, d: 0, s: 0, r: 0 })
 
-  //     synthModule.stop(synth, 0)
-  //     expect(synth.oscillators.length).toBe(0)
-  //   })
-  // })
+      synthModule.stop(synth, 0)
+      expect(synth.oscillators.length).toBe(0)
+    })
+  })
 
 })
