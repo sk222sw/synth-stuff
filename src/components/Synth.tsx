@@ -210,6 +210,8 @@ class Synth extends React.Component<{}, State> {
     const keyName = key.key
     const keyData = R.find(R.propEq('keyPress', keyName), this.state.keys)
 
+    if (!keyData) return
+
     keyData.frequency = Number(keyData.frequency)
 
     this.playNote(keyData)
