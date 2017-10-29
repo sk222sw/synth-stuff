@@ -31,7 +31,6 @@ describe('Filter', () => {
   describe('setFilterType', () => {
     it('should set the correct filter type', () => {
       const obj = Filter.setFilterType(setup(), 'highpass')
-      console.log(obj.type)
       expect(obj.type).toBe('highpass')
       expect(obj.filterNode.type).toBe('highpass')
     })

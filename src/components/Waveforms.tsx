@@ -40,7 +40,6 @@ export default class Waveforms extends React.Component<Props, State> {
   }
 
   render() {
-    console.log(this.waveformEnum)
     return (
       <div>
         <div className="waveform-container" onClick={this.onWaveformClick}>

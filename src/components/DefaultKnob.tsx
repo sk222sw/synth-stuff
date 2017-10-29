@@ -3,8 +3,8 @@ import Knob from 'react-canvas-knob'
 
 interface Props {
   value: number
-  onChange: (value: number) => void
-  onChangeEnd: (value: number) => void
+  onChange: (value: number) => {}
+  onChangeEnd: (value: number) => {}
   min: number
   max: number
   step: number

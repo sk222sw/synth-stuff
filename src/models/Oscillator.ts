@@ -102,7 +102,7 @@ const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: Oscilla
 }
 
 const create = (audioContext: AudioContext) =>
-  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0, filter }: IOscillatorConfig) => {
+  ({ frequency = 0, volume = 0, id = 0, offset = 0, waveform = 'sine', keyPress = 'a', semi = 0, filter, peakVolume = 0 }: IOscillatorConfig) => {
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
     const filterNode = filter ? Filter.createFilter(audioContext, filter) : undefined
@@ -126,6 +126,7 @@ const create = (audioContext: AudioContext) =>
       playing: false,
       volume,
       waveform,
+      peakVolume,
       filter: filterNode,
     }
   }

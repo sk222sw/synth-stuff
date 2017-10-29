@@ -12,7 +12,8 @@ import { CenteredRow, Row } from '../components/styles/index'
 import { keyExists, keyIsPressed, removeKey } from '../helpers/KeyHandler'
 import ComputerKeyboard from '../hocs/ComputerKeyboard'
 import { IFilterConfig } from '../models/Filter'
-import { IOscillator, IOscillatorConfig } from '../models/Oscillator'
+import { IOscillatorConfig } from '../models/Oscillator'
+import { KeyType } from './Key'
 
 const StyledSynth = styled.div`
   display: flex;
@@ -24,11 +25,6 @@ const StyledSynth = styled.div`
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 `
 
-const findByKeyPress = (oscillators: any) => R.compose(
-  R.filter(R.__, oscillators),
-  R.propEq('keyPress'),
-)
-
 interface State {
   synth: ISynth,
   muted: boolean,
@@ -36,7 +32,7 @@ interface State {
   volume: number,
   waveforms: string[],
   envelope: IEnvelope,
-  pressedKeys: KeyType[],
+  pressedKeys: string[],
   keys: any,
   oscillatorConfigs: IOscillatorConfig[],
   filter: IFilterConfig,
@@ -102,60 +98,58 @@ class Synth extends React.Component<{}, State> {
     window.removeEventListener('mouseup', this.stopPlaying)
   }
 
-  setOffset = (oscillator: IOscillator) => (offset: number) => {
+  setOffset = (oscillator: IOscillatorConfig, offset: number) => {
     const { oscillatorConfigs } = this.state
     const index = R.findIndex(R.propEq('id', oscillator.id))(oscillatorConfigs)
     const current = oscillatorConfigs[index]
 
-    if (oscillator.playing && this.state.synth)
+    if (oscillator.playing)
       hoo.setOffset(this.state.synth.oscillators[index], offset)
 
     this.updateOscillatorConfig(index, current, 'offset', offset)
   }
 
-  setOscillatorVolume = (oscillator: IOscillator) => (volume: number) => {
+  setOscillatorVolume = (oscillator: IOscillatorConfig, volume: number) => {
     const { oscillatorConfigs } = this.state
     const index = R.findIndex(R.propEq('id', oscillator.id))(oscillatorConfigs)
     const current = oscillatorConfigs[index]
 
-    if (oscillator.playing && this.state.synth)
+    if (oscillator.playing)
       hoo.setOscillatorVolume(this.state.synth.oscillators[index], volume)
 
     this.updateOscillatorConfig(index, current, 'peakVolume', volume)
   }
 
-  setWaveform = (oscillator: IOscillator) => (waveform: string) => {
+  setWaveform = (oscillator: IOscillatorConfig, waveform: string) => {
     const { oscillatorConfigs } = this.state
     const index = this.getOscillatorConfigById(oscillator.id)
     const current = oscillatorConfigs[index]
 
-    if (oscillator.playing && this.state.synth)
+    if (oscillator.playing)
       hoo.setWaveform(this.state.synth.oscillators[index], waveform)
 
     this.updateOscillatorConfig(index, current, 'waveform', waveform)
   }
 
   setFilterFrequency = (frequency: number) => {
-    if (this.state.synth)
-      hoo.setFilterFrequency(this.state.synth.oscillators, frequency)
+    hoo.setFilterFrequency(this.state.synth.oscillators, frequency)
     this.setState({ filter: { ...this.state.filter, frequency } })
   }
 
-  setSemi = (oscillator: IOscillator) => (value: number) => {
+  setSemi = (oscillator: IOscillatorConfig, value: number) => {
     const semi = Number(value)
     const { oscillatorConfigs } = this.state
     const index = this.getOscillatorConfigById(oscillator.id)
     const current = oscillatorConfigs[index]
 
-    if (oscillator.playing && this.state.synth)
+    if (oscillator.playing)
       hoo.setSemi(this.state.synth.oscillators[index], semi)
 
     this.updateOscillatorConfig(index, current, 'semi', semi)
   }
 
   setFrequency = (frequency: number) => {
-    if (this.state.synth)
-      hoo.setFrequency(this.state.synth, frequency)
+    hoo.setFrequency(this.state.synth, frequency)
     this.setState({ frequency })
   }
 
@@ -175,11 +169,11 @@ class Synth extends React.Component<{}, State> {
   }
 
   setOscillatorsToPlaying = () => {
-    const oscillators = this.state.oscillatorConfigs.map(o => {
-      o.playing = true
-    })
+    const oscillatorConfigs = this.state.oscillatorConfigs.map(o => ({
+      ...o, playing: true,
+    }))
 
-    this.setState({ oscillators })
+    this.setState({ oscillatorConfigs })
   }
 
   playWithoutPortamento = (key: KeyType) => {
@@ -192,9 +186,9 @@ class Synth extends React.Component<{}, State> {
         waveform: o.waveform,
         keyPress: key.keyPress,
         semi: o.semi,
-        filter: this.state.filter,
-        playing: o.playing,
+        playing: false,
         peakVolume: o.peakVolume,
+        filter: o.filter,
       })
     })
 
@@ -203,45 +197,49 @@ class Synth extends React.Component<{}, State> {
     hoo.play(this.state.synth, this.state.envelope)
   }
 
-  onKeyClick = key => {
-    this.handleKeyDown({ key: key.keyPress })
-  }
-
-  handleKeyDown = ({ key }) => {
-    if (keyExists(key) && !keyIsPressed(this.state.pressedKeys, key)) {
-
-      const keyData = R.find(R.propEq('keyPress', key), (this.state.keys))
-
-      this.playWithoutPortamento(keyData)
-
+  playNote = (key: KeyType) => {
+    if (keyExists(key.keyPress) && !keyIsPressed(this.state.pressedKeys, key.keyPress)) {
+      this.playWithoutPortamento(key)
       this.setState({
-        pressedKeys: [...this.state.pressedKeys, key],
+        pressedKeys: [...this.state.pressedKeys, key.keyPress],
       })
     }
+  }
+
+  handleKeyDown = (key: KeyboardEvent) => {
+    const keyName = key.key
+    const keyData = R.find(R.propEq('keyPress', keyName), this.state.keys)
+
+    keyData.frequency = Number(keyData.frequency)
+
+    this.playNote(keyData)
   }
 
   stopPlaying = () => {
     this.state.pressedKeys.forEach(key => {
-      this.handleKeyUp({ key })
+      this.stopNote(key)
     })
   }
 
-  handleKeyUp = ({ key }) => {
-    if (keyExists(key)) {
-      this.setState({
-        pressedKeys: removeKey(this.state.pressedKeys, key),
-      })
-      const oscillators = findByKeyPress(this.state.synth.oscillators)(key)
+  stopNote = (keyPress: string) => {
+    if (keyExists(keyPress)) {
+      const oscillators = this.state.synth.oscillators.filter(o => o.keyPress === keyPress)
+
       hoo.stopOscillators(this.state.synth, oscillators, this.state.envelope.r)
 
       this.setState({
+        pressedKeys: removeKey(this.state.pressedKeys, keyPress),
         synth: {
           ...this.state.synth,
           oscillators: this.state.synth.oscillators
-          .filter(o => o.keyPress !== key),
+            .filter(o => o.keyPress !== keyPress),
         },
       })
     }
+  }
+
+  handleKeyUp = (key: KeyboardEvent) => {
+    this.stopNote(key.key)
   }
 
   changeEnvelope = (type: string) => (value: number) => {
@@ -266,10 +264,10 @@ class Synth extends React.Component<{}, State> {
               key={o.id}
               oscillator={o}
               waveforms={this.state.waveforms}
-              setOscillatorVolume={this.setOscillatorVolume}
-              setOffset={this.setOffset}
-              setSemi={this.setSemi}
-              setWaveform={this.setWaveform(o)}
+              setOscillatorVolume={(oscillator, volume) => this.setOscillatorVolume(oscillator, volume)}
+              setOffset={(oscillator, offset) => this.setOffset(oscillator, offset)}
+              setSemi={(oscillator, semi) => this.setSemi(oscillator, semi)}
+              setWaveform={(oscillator, waveform) => this.setWaveform(oscillator, waveform)}
             />,
           )}
         </Row>
@@ -290,7 +288,7 @@ class Synth extends React.Component<{}, State> {
         <Keyboard
           keys={this.state.keys}
           currentKeys={this.state.pressedKeys}
-          onKeyClick={this.onKeyClick}
+          onKeyClick={this.playNote}
         />
       </StyledSynth>
     )

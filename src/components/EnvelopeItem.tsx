@@ -41,7 +41,7 @@ const OverridenSlider = styled(Slider)`
     //new
     border-right: 8px solid transparent;
   }
-` as Slider
+`
 
 const EnvelopeText = styled.span`
   font-size: 12px;
@@ -49,7 +49,14 @@ const EnvelopeText = styled.span`
 
 const initialRange = [1, 100]
 const initialStep = 1
-const initialPrefix = ''
+
+interface Props {
+  value: number
+  onChange: (value: number) => void
+  name: string
+  range: number[]
+  step: number
+}
 
 const EnvelopeItem = ({
   value,
@@ -57,8 +64,7 @@ const EnvelopeItem = ({
   name,
   range = initialRange,
   step = initialStep,
-  prefix = initialPrefix,
-}) => (
+}: Props) => (
   <div className="envelope-item">
     <SliderContainer>
       <OverridenSlider

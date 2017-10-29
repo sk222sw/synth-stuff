@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import styled from 'styled-components'
-import Key, {KeyType} from './Key'
+import Key, { KeyType } from './Key'
 import { Row } from './styles/index'
 
 const StyledKey = styled.div`
@@ -19,7 +19,7 @@ const StyledKeyboard = styled(Row)`
 interface Props {
   keys: KeyType[]
   currentKeys: string[]
-  onKeyClick: (key: string) => void
+  onKeyClick: (key: KeyType) => void
 }
 
 const Keyboard = ({ keys = [] as any[], currentKeys, onKeyClick }: Props) => (

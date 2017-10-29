@@ -36,7 +36,6 @@ const Envelope = ({
       value={envelope.a}
       step={1}
       range={[0, 999]}
-      prefix={'ms'}
     />
     <EnvelopeItem
       name={'D'}
@@ -44,7 +43,6 @@ const Envelope = ({
       value={envelope.d}
       step={1}
       range={[0, 999]}
-      prefix={'ms'}
     />
     <EnvelopeItem
       name={'S'}
@@ -59,7 +57,6 @@ const Envelope = ({
       value={envelope.r}
       step={1}
       range={[0,999]}
-      prefix={'ms'}
     />
   </StyledEnvelope>
 )

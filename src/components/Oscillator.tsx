@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Knob from 'react-canvas-knob'
 import styled from 'styled-components'
+import { IOscillatorConfig } from '../models/Oscillator'
 import { Row } from './styles/index'
 import Waveforms from './Waveforms'
 
@@ -27,11 +28,11 @@ const StyledOscillator = styled.div`
 `
 
 interface Props {
-  setOscillatorVolume: (value: number) => void
-  setOffset: (oscillator: Oscillator) => (value: number) => void
-  setSemi: (value: number) => void
-  setWaveform: (value: string) => void
-  oscillator: {}
+  setOscillatorVolume: (oscillator: IOscillatorConfig, value: number) => void
+  setOffset: (oscillator: IOscillatorConfig, value: number) => void
+  setSemi: (oscillator: IOscillatorConfig, value: number) => void
+  setWaveform: (oscillator: IOscillatorConfig, value: string) => void
+  oscillator: IOscillatorConfig
   waveforms: string[]
 }
 
@@ -51,8 +52,8 @@ const Oscillator = ({
           max={1}
           min={0}
           step={0.001}
-          onChange={setOscillatorVolume(oscillator)}
-          onChangeEnd={setOscillatorVolume(oscillator)}
+          onChange={(val: any) => setOscillatorVolume(oscillator, val)}
+          onChangeEnd={(val: any) => setOscillatorVolume(oscillator, val)}
           width={28}
           height={28}
           thickness={0.3}
@@ -63,7 +64,7 @@ const Oscillator = ({
       </StyledInputContainer>
       <Waveforms
         waveforms={waveforms}
-        onWaveformChange={setWaveform}
+        onWaveformChange={(waveform: string) => setWaveform(oscillator, waveform)}
       />
       <StyledInputContainer>
         <StyledInput
@@ -71,7 +72,7 @@ const Oscillator = ({
           max="50"
           min="-50"
           value={oscillator.offset}
-          onChange={(v: HtmlInEve) => setOffset(oscillator)(v.target.value)}
+          onChange={(v: any) => setOffset(oscillator, v.target.value)}
         />
         <Label>
           Cent
@@ -83,7 +84,7 @@ const Oscillator = ({
           max="24"
           min="-24"
           value={oscillator.semi}
-          onChange={(event: any) => setSemi(oscillator)(event.target.value)}
+          onChange={(event: any) => setSemi(oscillator, event.target.value)}
         />
         <Label>
           Semi

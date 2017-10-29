@@ -2,7 +2,7 @@ import * as React from 'react'
 import Knob from 'react-canvas-knob'
 
 interface Props {
-  setOffset: (value: number) => void
+  setOffset: (value: number) => {}
   offset: number
 }
 

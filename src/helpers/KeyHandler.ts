@@ -1,12 +1,11 @@
 import * as R from 'ramda'
 import keys from '../assets/keys.json'
-import { KeyType } from '../components/Key'
 
-export const keyExists = (key: KeyType) =>
+export const keyExists = (key: string) =>
   R.findIndex(R.propEq('keyPress', key))(keys) > -1
 
-export const keyIsPressed = (pressedKeys: KeyType[], key: KeyType) =>
+export const keyIsPressed = (pressedKeys: string[], key: string) =>
   pressedKeys.indexOf(key) > -1
 
-export const removeKey = (pressedKeys: KeyType[], key: KeyType) =>
-  R.filter(k => k !== key)(pressedKeys)
+export const removeKey = (pressedKeys: string[], key: string) =>
+  pressedKeys.filter(k => k !== key)
