@@ -56,7 +56,7 @@ class Synth extends React.Component<{}, State> {
     }
 
     this.state = {
-      synth: hoo.createSynth(ctx)({} as any),
+      synth: hoo.createSynth(ctx),
       muted: true,
       frequency: 880.00,
       volume: 0.1,

@@ -23,35 +23,13 @@ ShallowWrapper {
         <Oscillator
             oscillator={
                 Object {
+                    "frequency": 880,
                     "id": 0,
                     "offset": 0,
                     "peakVolume": 0.5,
                     "playing": false,
                     "semi": 0,
-                    "waveform": "sine",
-                  }
-            }
-            setOffset={[Function]}
-            setOscillatorVolume={[Function]}
-            setSemi={[Function]}
-            setWaveform={[Function]}
-            waveforms={
-                Array [
-                    "sine",
-                    "triangle",
-                    "sawtooth",
-                    "square",
-                  ]
-            }
-        />
-        <Oscillator
-            oscillator={
-                Object {
-                    "id": 1,
-                    "offset": 0,
-                    "peakVolume": 0.5,
-                    "playing": false,
-                    "semi": 0,
+                    "volume": 0.5,
                     "waveform": "sine",
                   }
             }
@@ -112,35 +90,13 @@ ShallowWrapper {
             <Oscillator
                   oscillator={
                         Object {
+                              "frequency": 880,
                               "id": 0,
                               "offset": 0,
                               "peakVolume": 0.5,
                               "playing": false,
                               "semi": 0,
-                              "waveform": "sine",
-                            }
-                  }
-                  setOffset={[Function]}
-                  setOscillatorVolume={[Function]}
-                  setSemi={[Function]}
-                  setWaveform={[Function]}
-                  waveforms={
-                        Array [
-                              "sine",
-                              "triangle",
-                              "sawtooth",
-                              "square",
-                            ]
-                  }
-            />
-            <Oscillator
-                  oscillator={
-                        Object {
-                              "id": 1,
-                              "offset": 0,
-                              "peakVolume": 0.5,
-                              "playing": false,
-                              "semi": 0,
+                              "volume": 0.5,
                               "waveform": "sine",
                             }
                   }
@@ -203,7 +159,7 @@ ShallowWrapper {
         "getOscillatorConfigById": [Function],
         "handleKeyDown": [Function],
         "handleKeyUp": [Function],
-        "onKeyClick": [Function],
+        "playNote": [Function],
         "playWithoutPortamento": [Function],
         "props": Object {},
         "refs": Object {},
@@ -230,19 +186,13 @@ ShallowWrapper {
           "muted": true,
           "oscillatorConfigs": Array [
             Object {
+              "frequency": 880,
               "id": 0,
               "offset": 0,
               "peakVolume": 0.5,
               "playing": false,
               "semi": 0,
-              "waveform": "sine",
-            },
-            Object {
-              "id": 1,
-              "offset": 0,
-              "peakVolume": 0.5,
-              "playing": false,
-              "semi": 0,
+              "volume": 0.5,
               "waveform": "sine",
             },
           ],
@@ -262,6 +212,7 @@ ShallowWrapper {
             "square",
           ],
         },
+        "stopNote": [Function],
         "stopPlaying": [Function],
         "updateOscillatorConfig": [Function],
         "updater": Object {
@@ -297,35 +248,13 @@ ShallowWrapper {
                     <Oscillator
                               oscillator={
                                         Object {
+                                                  "frequency": 880,
                                                   "id": 0,
                                                   "offset": 0,
                                                   "peakVolume": 0.5,
                                                   "playing": false,
                                                   "semi": 0,
-                                                  "waveform": "sine",
-                                                }
-                              }
-                              setOffset={[Function]}
-                              setOscillatorVolume={[Function]}
-                              setSemi={[Function]}
-                              setWaveform={[Function]}
-                              waveforms={
-                                        Array [
-                                                  "sine",
-                                                  "triangle",
-                                                  "sawtooth",
-                                                  "square",
-                                                ]
-                              }
-                    />
-                    <Oscillator
-                              oscillator={
-                                        Object {
-                                                  "id": 1,
-                                                  "offset": 0,
-                                                  "peakVolume": 0.5,
-                                                  "playing": false,
-                                                  "semi": 0,
+                                                  "volume": 0.5,
                                                   "waveform": "sine",
                                                 }
                               }
@@ -386,35 +315,13 @@ ShallowWrapper {
                     <Oscillator
                               oscillator={
                                         Object {
+                                                  "frequency": 880,
                                                   "id": 0,
                                                   "offset": 0,
                                                   "peakVolume": 0.5,
                                                   "playing": false,
                                                   "semi": 0,
-                                                  "waveform": "sine",
-                                                }
-                              }
-                              setOffset={[Function]}
-                              setOscillatorVolume={[Function]}
-                              setSemi={[Function]}
-                              setWaveform={[Function]}
-                              waveforms={
-                                        Array [
-                                                  "sine",
-                                                  "triangle",
-                                                  "sawtooth",
-                                                  "square",
-                                                ]
-                              }
-                    />
-                    <Oscillator
-                              oscillator={
-                                        Object {
-                                                  "id": 1,
-                                                  "offset": 0,
-                                                  "peakVolume": 0.5,
-                                                  "playing": false,
-                                                  "semi": 0,
+                                                  "volume": 0.5,
                                                   "waveform": "sine",
                                                 }
                               }

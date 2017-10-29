@@ -14,8 +14,8 @@ export interface ISynth {
   context: AudioContext
 }
 
-const createSynth = (context = ctx) => ({ oscillators = [] }: {oscillators: IOscillator[]}) => ({
-  oscillators,
+const createSynth = (context = ctx) => ({
+  oscillators: [],
   context,
 })
 
