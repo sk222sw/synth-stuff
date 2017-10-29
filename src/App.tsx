@@ -2,7 +2,7 @@ import * as React from 'react'
 import './App.css'
 
 import styled from 'styled-components'
-import Synth from './components/Synth'
+import SynthContainer from './SynthContainer'
 
 const StyledApp = styled.div`
   width: 100%;
@@ -13,14 +13,10 @@ const StyledApp = styled.div`
   flex-direction: row;
 `
 
-class App extends React.Component<{}, any> {
-  render() {
-    return (
-      <StyledApp>
-        <Synth />
-      </StyledApp>
-    )
-  }
-}
+const App = ({ props }: any) => (
+  <StyledApp>
+    <SynthContainer {...props} />
+  </StyledApp>
+)
 
 export default App
