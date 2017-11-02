@@ -66,7 +66,6 @@ function synthReducer(state = initialState, action: ActionTypes) {
     case SynthTypeKeys.REMOVE_PRESSED_KEY:
       return { ...state, pressedKeys: state.pressedKeys.filter(x => x !== action.payload) }
     case SynthTypeKeys.REMOVE_ALL_KEYS:
-      console.log('hej')
       return { ...state, pressedKeys: [] }
     default:
       return state
