@@ -17,21 +17,33 @@ const StyledSynth = styled.div`
 interface Props {
   keys: any[],
   onAddOscillator: (config: IOscillatorConfig) => {}
+  addPressedKey: (key: string) => {}
+  removePressedKey: (key: string) => {}
+  removeAllKeys: () => {}
   stopPlaying: any
   startPlaying: any
+  pressedKeys: string[]
 }
 
 class Synth extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props)
-
   }
 
-  handleKeyDown = () => {
-    return
+  componentDidMount() {
+    window.addEventListener('mouseup', this.props.removeAllKeys)
   }
-  handleKeyUp = () => {
-    return
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this.props.removeAllKeys)
+  }
+  handleKeyDown = (key: KeyboardEvent) => {
+    this.props.addPressedKey(key.key)
+  }
+  handleKeyUp = (key: KeyboardEvent) => {
+    this.props.removePressedKey(key.key)
+  }
+  onKeyClick = (key: any) => {
+    this.props.addPressedKey(key.name)
   }
 
   render() {
@@ -44,8 +56,9 @@ class Synth extends React.Component<Props, {}> {
         <Keyboard
           keys={this.props.keys}
           currentKeys={this.props.pressedKeys}
-          onKeyClick={() => ({})}
+          onKeyClick={this.onKeyClick}
         />
+        {this.props.pressedKeys.map((k, key) => <div key={key}>{k}</div>)}
       </StyledSynth>
     )
   }

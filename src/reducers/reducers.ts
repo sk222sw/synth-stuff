@@ -61,6 +61,13 @@ function synthReducer(state = initialState, action: ActionTypes) {
   switch (action.type) {
     case SynthTypeKeys.ADD_OSCILLATOR:
       return { ...state, oscillatorConfigs: state.oscillatorConfigs.push(action.payload) }
+    case SynthTypeKeys.ADD_PRESSED_KEY:
+      return { ...state, pressedKeys: [...state.pressedKeys, action.payload] }
+    case SynthTypeKeys.REMOVE_PRESSED_KEY:
+      return { ...state, pressedKeys: state.pressedKeys.filter(x => x !== action.payload) }
+    case SynthTypeKeys.REMOVE_ALL_KEYS:
+      console.log('hej')
+      return { ...state, pressedKeys: [] }
     default:
       return state
   }
