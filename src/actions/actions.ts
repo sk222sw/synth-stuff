@@ -1,3 +1,5 @@
+import { Dispatch } from 'react-redux'
+import { shouldAddKey } from '../helpers/KeyHandler'
 import { IOscillatorConfig } from '../models/Oscillator'
 import { OtherTypeKeys, SynthTypeKeys } from './constants'
 
@@ -46,10 +48,14 @@ export const removeOscillator = (id: number): RemoveOscillatorAction => ({
   payload: id,
 })
 
-export const addPressedKey = (payload: string): AddPressedKeyAction => ({
-  type: SynthTypeKeys.ADD_PRESSED_KEY,
-  payload,
-})
+export const addPressedKey = (payload: string) =>
+  (dispatch: Dispatch<AddOscillatorAction>, getState: any) => {
+    if (shouldAddKey(getState().synthReducer.pressedKeys, payload))
+      dispatch({
+        type: SynthTypeKeys.ADD_PRESSED_KEY,
+        payload,
+      })
+  }
 
 export const removePressedKey = (payload: string): RemovePressedKeyAction => ({
   type: SynthTypeKeys.REMOVE_PRESSED_KEY,
