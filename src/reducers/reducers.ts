@@ -4,6 +4,7 @@ import { ActionTypes } from '../actions/actions'
 import { SynthTypeKeys } from '../actions/constants'
 import keys from '../assets/keys.json'
 import { IEnvelope } from '../components/Envelope'
+import { shouldAddKey } from '../helpers/KeyHandler'
 import { IOscillatorConfig } from '../models/Oscillator'
 import hoo, { ISynth } from '../models/Synth'
 
@@ -42,7 +43,6 @@ const initialState: InitialState = {
     'triangle',
     'sawtooth',
     'square',
-
   ],
   envelope: {
     a: 10,
@@ -61,12 +61,18 @@ function synthReducer(state = initialState, action: ActionTypes) {
   switch (action.type) {
     case SynthTypeKeys.ADD_OSCILLATOR:
       return { ...state, oscillatorConfigs: state.oscillatorConfigs.push(action.payload) }
+
     case SynthTypeKeys.ADD_PRESSED_KEY:
-      return { ...state, pressedKeys: [...state.pressedKeys, action.payload] }
+      return shouldAddKey(state.pressedKeys, action.payload)
+        ? { ...state, pressedKeys: [...state.pressedKeys, action.payload] }
+        : { ...state }
+
     case SynthTypeKeys.REMOVE_PRESSED_KEY:
       return { ...state, pressedKeys: state.pressedKeys.filter(x => x !== action.payload) }
+
     case SynthTypeKeys.REMOVE_ALL_KEYS:
       return { ...state, pressedKeys: [] }
+
     default:
       return state
   }

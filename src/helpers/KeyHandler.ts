@@ -9,3 +9,6 @@ export const keyIsPressed = (pressedKeys: string[], key: string) =>
 
 export const removeKey = (pressedKeys: string[], key: string) =>
   pressedKeys.filter(k => k !== key)
+
+export const shouldAddKey = (pressedKeys: string[], key: string) =>
+  !keyIsPressed(pressedKeys, key) && keyExists(key)
