@@ -33,32 +33,37 @@ class Synth extends React.Component<Props, {}> {
   componentDidMount() {
     window.addEventListener('mouseup', this.props.removeAllKeys)
   }
+
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.props.removeAllKeys)
   }
-  handleKeyDown = (key: KeyboardEvent) => {
+
+  handleKeyDown = (key: KeyboardEvent) =>
     this.props.addPressedKey(key.key)
-  }
-  handleKeyUp = (key: KeyboardEvent) => {
+
+  handleKeyUp = (key: KeyboardEvent) =>
     this.props.removePressedKey(key.key)
-  }
-  onKeyClick = (key: any) => {
+
+  onKeyClick = (key: any) =>
     this.props.addPressedKey(key.name)
-  }
 
   render() {
     return (
       <StyledSynth>
+
         <ComputerKeyboard // lift
           onKeyDown={this.handleKeyDown}
           onKeyUp={this.handleKeyUp}
         />
+
         <Keyboard
           keys={this.props.keys}
           currentKeys={this.props.pressedKeys}
           onKeyClick={this.onKeyClick}
         />
+
         {this.props.pressedKeys.map((k, key) => <div key={key}>{k}</div>)}
+
       </StyledSynth>
     )
   }
