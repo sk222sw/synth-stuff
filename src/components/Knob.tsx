@@ -52,16 +52,17 @@ function getDivPointFromRef(ref: React.RefObject<HTMLDivElement>) {
   };
 }
 
-function Knob({ min = 0, max = 127, maxDegree = 300 }) {
+function Knob({ max = 127, maxDegree = 300 }) {
+  // TODO: support changing min
+  const min = 0;
   const resolution = max - min;
   const knobRef = React.useRef<HTMLDivElement>(null);
   const [isMouseDown, setIsMouseDown] = React.useState(false);
-  const showDebugTexts = true;
 
   const startAngle = (360 - maxDegree) / 2;
   const endAngle = startAngle + maxDegree;
   const startDegree = Math.floor(
-    getStartDegree(min, max, startAngle, endAngle, 30)
+    getStartDegree(min, max, startAngle, endAngle, startAngle)
   );
   const [currentDegree, setCurrentDegree] = React.useState(startDegree);
 
@@ -88,11 +89,8 @@ function Knob({ min = 0, max = 127, maxDegree = 300 }) {
 
   useMouseDragEvents(isMouseDown, mouseMoveHandler, mouseUpHandler);
 
-  // probably needs a better name. transforms the degree to it's relative value in the given resolution
   function getResolutionValue() {
-    const _resolution = maxDegree / resolution;
-    // todo: find out why 30 is a magic number when maxDegree is 300 (rn it prevents changing max degree)
-    return Math.floor((currentDegree - 30) / _resolution);
+    return Math.round((currentDegree - startAngle) / (maxDegree / resolution));
   }
 
   const style = {
