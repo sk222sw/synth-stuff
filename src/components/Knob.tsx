@@ -52,7 +52,13 @@ function getDivPointFromRef(ref: React.RefObject<HTMLDivElement>) {
   };
 }
 
-function Knob({ max = 127, maxDegree = 300 }) {
+interface KnobProps {
+  max?: number;
+  maxDegree?: number;
+  onChange?: Function;
+}
+
+function Knob({ max = 127, maxDegree = 300, onChange }: KnobProps) {
   // TODO: support changing min
   const min = 0;
   const resolution = max - min;
@@ -65,6 +71,9 @@ function Knob({ max = 127, maxDegree = 300 }) {
     getStartDegree(min, max, startAngle, endAngle, startAngle)
   );
   const [currentDegree, setCurrentDegree] = React.useState(startDegree);
+  const [resolutionValue, setResolutionValue] = React.useState(
+    calculateResolutionValue()
+  );
 
   const mouseDownHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -85,13 +94,16 @@ function Knob({ max = 127, maxDegree = 300 }) {
 
     const degree = getDegree(e.clientX, e.clientY, point, startAngle, endAngle);
     setCurrentDegree(degree);
+
+    setResolutionValue(calculateResolutionValue());
+    onChange?.(resolutionValue);
   };
 
-  useMouseDragEvents(isMouseDown, mouseMoveHandler, mouseUpHandler);
-
-  function getResolutionValue() {
+  function calculateResolutionValue() {
     return Math.round((currentDegree - startAngle) / (maxDegree / resolution));
   }
+
+  useMouseDragEvents(isMouseDown, mouseMoveHandler, mouseUpHandler);
 
   const style = {
     transform: `rotate(${currentDegree}deg)`,
@@ -102,7 +114,7 @@ function Knob({ max = 127, maxDegree = 300 }) {
       <StyledKnob ref={knobRef} onMouseDown={mouseDownHandler} style={style}>
         <Grip></Grip>
       </StyledKnob>
-      <TinyText>{getResolutionValue()}</TinyText>
+      <TinyText>{resolutionValue}</TinyText>
     </div>
   );
 }
