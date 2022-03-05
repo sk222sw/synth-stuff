@@ -1,29 +1,17 @@
-import * as React from 'react'
-import Knob from 'react-canvas-knob'
+import * as React from "react";
+import Knob from "./Knob";
 
 interface Props {
-  type: string
-  frequency: number,
-  onFrequencyChange: (value: number) => void
+  type: string;
+  frequency: number;
+  onFrequencyChange: (value: number) => void;
 }
 
 const Filter = ({ type, frequency, onFrequencyChange }: Props) => (
   <div>
-    <div>
-      {type}
-    </div>
-    <Knob
-      value={Number(frequency.toFixed(2))}
-      max={20000}
-      min={0}
-      step={1}
-      onChange={onFrequencyChange}
-      onChangeEnd={onFrequencyChange}
-      width={50}
-      thickness={0.3}
-      angleOffset={-125}
-      angleArc={250}
-    />
-  </div>)
+    <div>{type}</div>
+    <Knob max={20000} onChange={onFrequencyChange}></Knob>
+  </div>
+);
 
-export default Filter
+export default Filter;

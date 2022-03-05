@@ -59,7 +59,6 @@ interface KnobProps {
 }
 
 function Knob({ max = 127, maxDegree = 300, onChange }: KnobProps) {
-  // TODO: support changing min
   const min = 0;
   const resolution = max - min;
   const knobRef = React.useRef<HTMLDivElement>(null);

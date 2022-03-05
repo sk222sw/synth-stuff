@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Knob from 'react-canvas-knob'
 
 interface Props {
   setOffset: (value: number) => {}
@@ -10,7 +9,7 @@ const Offset = ({ setOffset, offset }: Props) => (
   <div>
     Cent
     <div>
-    <Knob
+    {/* <Knob
       value={offset}
       max={50}
       min={-50}
@@ -22,7 +21,7 @@ const Offset = ({ setOffset, offset }: Props) => (
       thickness={0.3}
       angleOffset={-125}
       angleArc={250}
-    />
+    /> */}
     </div>
   </div>
 )

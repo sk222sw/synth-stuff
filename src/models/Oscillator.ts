@@ -24,6 +24,8 @@ const start = (audioContext: AudioContext, oscillator: IOscillator, currentTime:
     return oscillator
 
   if (oscillator.filter) {
+    if (!oscillator.filter.filterNode) throw new Error('No filter node')
+    
     oscillator.oscillator.connect(oscillator.filter.filterNode)
     oscillator.filter.filterNode.connect(oscillator.gain)
   } else {
@@ -103,18 +105,18 @@ const stop = (oscillator: {gain: GainNode, playing: boolean, oscillator: Oscilla
 
 const create = (audioContext: AudioContext) =>
   (config?: IOscillatorConfig) => {
-    const frequency = config && config.frequency || 0
-    const volume = config && config.volume || 0
-    const offset = config && config.offset || 0
-    const semi = config && config.semi || 0
-    const waveform = config && config.waveform || 'sine'
-    const keyPress = config && config.keyPress || 'a'
-    const peakVolume = config && config.peakVolume || 0.5
-    const id = config && config.id || 0
+    const frequency = config?.frequency ?? 0
+    const volume = config?.volume ?? 0
+    const offset = config?.offset ?? 0
+    const semi = config?.semi ?? 0
+    const waveform = config?.waveform ?? 'sine'
+    const keyPress = config?.keyPress ?? 'a'
+    const peakVolume = config?.peakVolume ?? 0.5
+    const id = config?.id ?? 0
 
     const oscillator = audioContext.createOscillator()
     const gain = audioContext.createGain()
-    const filterNode = config && config.filter ? Filter.createFilter(audioContext, config.filter) : undefined
+    const filterNode = config?.filter ? Filter.createFilter(audioContext, config.filter) : undefined
 
     oscillator.frequency.value = Number(frequency)
     oscillator.detune.value = Number(semi * 100)
@@ -181,7 +183,7 @@ export const _rampGainAndBeQuite = (gainNode: GainNode, gain: number, time: numb
   gainNode.gain.setTargetAtTime(0, time, quiteAt)
 }
 
-export default {
+const Oscillator = {
   start,
   stop,
   create,
@@ -191,3 +193,4 @@ export default {
   setSemi,
   setWaveform,
 }
+export default Oscillator

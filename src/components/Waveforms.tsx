@@ -27,7 +27,7 @@ export default class Waveforms extends React.Component<Props, State> {
     }
   }
 
-  readonly waveformEnum = R.mapObjIndexed(R.identity)(this.props.waveforms)
+  readonly waveformEnum = R.mapObjIndexed<number, number>(R.identity)(this.props.waveforms)
 
   imageUrl = () => {
     return this.state.images[this.state.selectedWaveformIndex]

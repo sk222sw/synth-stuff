@@ -1,40 +1,46 @@
 export interface IFilterConfig {
   frequency: number
-  type: string
+  type: BiquadFilterType
 }
 
 export interface IFilter extends IFilterConfig {
-  filterNode: BiquadFilterNode
+  filterNode?: BiquadFilterNode,
 }
 
 const createFilter = (audioContext: AudioContext, { frequency = 7000, type = 'lowpass' } = {}): IFilter => {
   const filterNode = audioContext.createBiquadFilter()
-  filterNode.type = type as BiquadFilterType
+  const _type = type as BiquadFilterType;
+  filterNode.type = _type 
   ;filterNode.frequency.value = frequency
 
   return {
     frequency,
-    type,
+    type: _type,
     filterNode,
   }
 }
 
 const setFilterType = (filter: IFilter, type: string) => {
-  filter.filterNode.type = type as BiquadFilterType
-  filter.type = type
+  if (!filter.filterNode) throw new Error('No filter node')
+  const _type = type as BiquadFilterType;
+  filter.filterNode.type = _type 
+  filter.type = _type
 
   return filter
 }
 
 const setFrequency = (filter: IFilter, frequency: number) => {
+  if (!filter.filterNode) throw new Error('No filter node')
   filter.filterNode.frequency.value = frequency
   filter.frequency = frequency
 
   return filter
 }
 
-export default {
+const Filter = {
   createFilter,
   setFilterType,
   setFrequency,
 }
+
+export default Filter

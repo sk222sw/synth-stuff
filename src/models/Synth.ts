@@ -72,7 +72,8 @@ const setFilterFrequency = (oscillators: IOscillator[], frequency: number) => {
   })
 }
 
-export default {
+const Synth = 
+{
   setup,
   createSynth,
   addOscillator,
@@ -86,3 +87,4 @@ export default {
   setOscillatorVolume,
   setFilterFrequency,
 }
+export default Synth
